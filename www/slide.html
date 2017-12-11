@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{.Title}}</title>
+    <style>*{margin:0;padding:0;box-sizing:border-box}#slide{display:none}.slide{white-space:nowrap}.slide-content{align-self:center}@media screen{body{position:absolute;top:50%;left:50%}.slide-4x3{width:1024px;height:768px;margin:-384px 0 0 -512px}.slide-16x9{width:1024px;height:576px;margin:-288px 0 0 -512px}.slide-16x10{width:1024px;height:640px;margin:-320px 0 0 -512px}.slide{position:absolute;width:100%;height:100%;display:flex;justify-content:center;overflow:hidden}}@media print{body{transform:none!important}h1{font-size:1.8rem;line-height:1.5;letter-spacing:-.05rem;font-weight:300}.slide-root{width:100%;display:flex;flex-wrap:wrap;align-items:stretch}.slide-content{transform:none!important}.slide{display:flex;justify-content:center;flex:1;padding:.5rem;margin:.5rem .5rem 4rem .5rem;border:1px solid rgba(0,0,0,0.2);visibility:visible!important}}</style>
+    <script>function trimIndent(e){var t=(e.match(INDENT_RE)||[""])[0].length;if(t>0){var n=e.substring(0,t);return e.replace(new RegExp(n,"g"),"")}}function renderSlide(e,t,n){var i=t.split("\n"),r=-1,o=document.createElement("div"),d=document.createElement("div"),s="";o.className="slide slide-"+n,d.className="slide-content";for(var l=0;l<i.length;l++){var a=i[l];if(a.startsWith("#"))s=s+"<h1>"+a.substring(1)+"</h1>";else if(a.startsWith("  ")||a.startsWith("	"))s=s+"<pre>"+a.replace(/^(  )|\t/,"")+"</pre>";else{a.startsWith(".")&&(a=a.substring(1));for(var c=0;c<a.length;c++){var h=a.charAt(c);"*"==h?-1==r?(s+="<strong>",r=s.length):(r!=s.length?s+="</strong>":s=s.substring(0,s.length-8)+"*",r=-1):s+=h}s+="<br/>"}}d.innerHTML=s,o.appendChild(d),e.appendChild(o),o.style.visibility="hidden"}function render(e){var t=document.createElement("div");t.className="slide-root",document.body.appendChild(t),e=trimIndent(e);for(var n=e.split(/[\s+]\n/gm),i=0;i<n.length;i++){var r=n[i].trim();renderSlide(t,r,i)}return t}function resize(){var e=window.innerWidth,t=window.innerHeight,n=document.body.offsetWidth,i=document.body.offsetHeight,r=n/i>e/t?e/n:t/i;document.body.style.transform="scale("+r+")"}function goTo(e){currentSlide=e,window.location.hash=e;for(var t=document.querySelectorAll(".slide"),n=0;n<t.length;n++){var i=t[n],r=i.children[0],o=.8*i.offsetWidth/r.offsetWidth,d=.8*i.offsetHeight/r.offsetHeight;r.style.transform="scale("+Math.min(o,d)+")",n==currentSlide?i.style.visibility="":i.style.visibility="hidden"}}function next(){goTo(Math.min(currentSlide+1,document.querySelectorAll(".slide").length-1))}function prev(){goTo(Math.max(currentSlide-1,0))}var INDENT_RE=/^(?:( )+|\t+)/,currentSlide=-1;window.onload=function(){resize(),render(document.getElementById("slide").innerHTML),goTo(window.location.hash.substring(1)||0),window.onclick=next,window.onresize=resize,window.onkeydown=function(e){39==e.keyCode?next():37==e.keyCode&&prev()}};</script>
+    <style media="screen">
+      {{.Styles}}
+    </style>
+  </head>
+  <body class="slide-16x9">
+    <pre id="slide">
+{{.Slides}}
+    </pre>
+  </body>
+</html>
+

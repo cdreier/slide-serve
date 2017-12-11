@@ -1,0 +1,35 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext);
+@import url(https://fonts.googleapis.com/css?family=Oswald:400,700);
+@import url(https://fonts.googleapis.com/css?family=Inconsolata);
+/* Customize theme: change body, h1, strong, pre or .slide class */
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #edd400;
+  color: #453029;
+  line-height: 1.54;
+}
+.slide h1 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+  font-size: 2.6rem;
+}
+.slide pre {
+  font-family: 'Inconsolata';
+  font-size: 0.6rem;
+  line-height: 1.1;
+}
+.slide-10 h1 { color: #fff; text-shadow: 1px 1px 3px #453029; }
+.slide-11 {
+  background: url("http://trikita.co/slide/icon.png"), url("http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/asanoha-400px.png");
+  background-repeat: no-repeat, repeat;
+  background-size: 35%, auto;
+  background-position: bottom right;
+}
+.slide-13 .slide-content {
+  background-image: url("http://trikita.co/slide/write_framed.png"),
+    url("http://trikita.co/slide/styles.gif"),
+    url("http://trikita.co/slide/illustrate_framed.png");
+  background-repeat: no-repeat;
+  background-size: 40%, 40%, 40%;
+  background-position: bottom left, bottom center, bottom right;
+}
