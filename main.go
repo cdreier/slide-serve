@@ -36,6 +36,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", h.handler)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(*rootDir))))
 	http.HandleFunc("/favicon.ico", h.na)
 	fmt.Println("starting on port: " + *port + " for directory " + *rootDir)
 	http.ListenAndServe(":"+*port, nil)
@@ -50,6 +51,7 @@ type SlideContent struct {
 func (h *holder) na(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 }
+
 func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 	box := packr.NewBox("www")
 	t, _ := template.New("slide").Parse(box.String("slide.html"))
@@ -77,16 +79,38 @@ func getSlides(dir string) (string, string) {
 			return nil
 		}
 
-		if filepath.Base(path) == "styles.css" {
-			styles = string(content)
-		} else {
+		switch filepath.Ext(path) {
+		case ".css":
+			styles += string(content)
+		case ".md":
 			slides += getSlideContent(string(content))
+		case ".jpg", ".png", ".gif":
+			styles += addStyleRule(path)
 		}
 
 		return nil
 	})
 
 	return slides, styles
+}
+
+func addStyleRule(filename string) string {
+
+	imgType := filepath.Ext(filename)
+	imgURL := "/static/" + filepath.Base(filename)
+	parts := strings.SplitAfter(filename, "bg-")
+	targetSlide := strings.Replace(parts[1], imgType, "", 1)
+
+	css := fmt.Sprintf(`.slide-%s {
+		background: url("%s");
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center;
+	}
+
+	`, targetSlide, imgURL)
+
+	return css
 }
 
 func getSlideContent(content string) string {
@@ -96,7 +120,8 @@ func getSlideContent(content string) string {
 
 	scanner := bufio.NewScanner(strings.NewReader(content))
 	for scanner.Scan() {
-		finalSlide += "\t" + scanner.Text() + "\n"
+		tmp := scanner.Text()
+		finalSlide += "\t" + tmp + "\n"
 	}
 
 	finalSlide += "\n"
