@@ -120,7 +120,7 @@ func getSlideContent(content string) string {
 
 	scanner := bufio.NewScanner(strings.NewReader(content))
 	for scanner.Scan() {
-		tmp := scanner.Text()
+		tmp := strings.Trim(scanner.Text(), "\t ")
 		finalSlide += "\t" + tmp + "\n"
 	}
 
