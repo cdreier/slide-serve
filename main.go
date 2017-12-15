@@ -16,8 +16,15 @@ import (
 )
 
 type holder struct {
-	dir   string
-	title string
+	dir    string
+	title  string
+	slides []slide
+	styles string
+}
+
+type slide struct {
+	content string
+	image   string
 }
 
 func main() {
@@ -34,6 +41,8 @@ func main() {
 		dir:   *rootDir,
 		title: *title,
 	}
+
+	h.parse()
 
 	http.HandleFunc("/", h.handler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(*rootDir))))
@@ -52,24 +61,8 @@ func (h *holder) na(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 }
 
-func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
-	box := packr.NewBox("www")
-	t, _ := template.New("slide").Parse(box.String("slide.html"))
-
-	slides, styles := getSlides(h.dir)
-
-	s := SlideContent{
-		Slides: slides,
-		Styles: template.CSS(styles),
-		Title:  h.title,
-	}
-	t.Execute(w, s)
-}
-
-func getSlides(dir string) (string, string) {
-	slides := ""
-	styles := ""
-	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+func (h *holder) parse() {
+	filepath.Walk(h.dir, func(path string, info os.FileInfo, err error) error {
 		if isDir(path) {
 			return nil
 		}
@@ -81,51 +74,78 @@ func getSlides(dir string) (string, string) {
 
 		switch filepath.Ext(path) {
 		case ".css":
-			styles += string(content)
+			h.styles += string(content)
 		case ".md":
-			slides += getSlideContent(string(content))
-		case ".jpg", ".png", ".gif":
-			styles += addStyleRule(path)
+			h.generateSlides(string(content))
+			// case ".jpg", ".png", ".gif":
+			// 	styles += addStyleRule(path)
 		}
 
 		return nil
 	})
-
-	return slides, styles
 }
 
-func addStyleRule(filename string) string {
+func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
+	box := packr.NewBox("./www")
+	t, _ := template.New("slide").Parse(box.String("slide.html"))
 
-	imgType := filepath.Ext(filename)
-	imgURL := "/static/" + filepath.Base(filename)
-	parts := strings.SplitAfter(filename, "bg-")
-	targetSlide := strings.Replace(parts[1], imgType, "", 1)
+	slides := ""
+	styles := h.styles
 
-	css := fmt.Sprintf(`.slide-%s {
+	for i, s := range h.slides {
+		slides += s.content
+		slides += "\n"
+
+		if s.image != "" {
+			styles += "\n"
+			styles += addStyleRule(s.image, i)
+		}
+
+	}
+
+	s := SlideContent{
+		Slides: slides,
+		Styles: template.CSS(styles),
+		Title:  h.title,
+	}
+	t.Execute(w, s)
+}
+
+func addStyleRule(filename string, slideNumber int) string {
+
+	imgURL := "/static/" + filename
+
+	css := fmt.Sprintf(`.slide-%d {
 		background: url("%s");
 		background-repeat: no-repeat;
 		background-size: contain;
 		background-position: center;
 	}
-
-	`, targetSlide, imgURL)
+	`, slideNumber, imgURL)
 
 	return css
 }
 
-func getSlideContent(content string) string {
-	cleanup := strings.TrimLeft(content, "\n \t")
-	cleanup = strings.TrimRight(cleanup, "\n \t")
-	finalSlide := ""
+func (h *holder) generateSlides(content string) {
+	cleanup := strings.Trim(content, "\n \t")
 
-	scanner := bufio.NewScanner(strings.NewReader(content))
+	scanner := bufio.NewScanner(strings.NewReader(cleanup))
+	s := slide{}
 	for scanner.Scan() {
 		tmp := strings.Trim(scanner.Text(), "\t ")
-		finalSlide += "\t" + tmp + "\n"
+		if tmp == "" {
+			h.slides = append(h.slides, s)
+			s = slide{}
+		} else {
+			if strings.HasPrefix(tmp, "@img") {
+				s.image = strings.Replace(tmp, "@img", "", -1)
+			} else {
+				s.content += "\t" + tmp + "\n"
+			}
+		}
 	}
+	h.slides = append(h.slides, s)
 
-	finalSlide += "\n"
-	return finalSlide
 }
 
 func isDir(dir string) bool {

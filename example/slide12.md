@@ -6,3 +6,6 @@
     background-size: 40%, auto;
     background-position: bottom right;
   }
+
+# added dynamicly
+@img/example_bg.jpg
