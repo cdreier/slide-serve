@@ -25,6 +25,7 @@ type holder struct {
 type slide struct {
 	content string
 	image   string
+	styles  string
 }
 
 func main() {
@@ -139,6 +140,9 @@ func (h *holder) generateSlides(content string) {
 		} else {
 			if strings.HasPrefix(tmp, "@img") {
 				s.image = strings.Replace(tmp, "@img", "", -1)
+			} else if strings.HasPrefix(tmp, "@css") {
+				// TODO reading file? - need to add slide index
+				s.styles = strings.Replace(tmp, "@css", "", -1)
 			} else {
 				s.content += "\t" + tmp + "\n"
 			}
