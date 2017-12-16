@@ -20,6 +20,7 @@ type holder struct {
 	title  string
 	slides []slide
 	styles string
+	dev bool
 }
 
 type slide struct {
@@ -32,6 +33,7 @@ func main() {
 	port := flag.String("port", "8080", "http port the server is starting on")
 	rootDir := flag.String("dir", "example", "root dir of your presentation")
 	title := flag.String("title", "Slide", "html title")
+	devMode := flag.Bool("dev", false, "dev true to start a filewatcher and reload the edited slide")
 	flag.Parse()
 
 	if !dirExist(*rootDir) {
@@ -41,11 +43,15 @@ func main() {
 	h := holder{
 		dir:   *rootDir,
 		title: *title,
+		dev: *devMode,
 	}
 
 	h.parse()
 
 	http.HandleFunc("/", h.handler)
+	if devMode {
+		http.HandleFunc("/ws", h.ws)
+	}
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(*rootDir))))
 	http.HandleFunc("/favicon.ico", h.na)
 	fmt.Println("starting on port: " + *port + " for directory " + *rootDir)
