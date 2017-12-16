@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"flag"
 	"fmt"
 	"html/template"
@@ -20,7 +21,7 @@ type holder struct {
 	title  string
 	slides []slide
 	styles string
-	dev bool
+	dev    bool
 }
 
 type slide struct {
@@ -43,13 +44,13 @@ func main() {
 	h := holder{
 		dir:   *rootDir,
 		title: *title,
-		dev: *devMode,
+		dev:   *devMode,
 	}
 
 	h.parse()
 
 	http.HandleFunc("/", h.handler)
-	if devMode {
+	if *devMode {
 		http.HandleFunc("/ws", h.ws)
 	}
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(*rootDir))))
@@ -59,9 +60,10 @@ func main() {
 }
 
 type SlideContent struct {
-	Slides string
-	Title  string
-	Styles template.CSS
+	Slides  string
+	Title   string
+	Styles  template.CSS
+	DevMode template.HTML
 }
 
 func (h *holder) na(w http.ResponseWriter, r *http.Request) {
@@ -115,6 +117,16 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 		Styles: template.CSS(styles),
 		Title:  h.title,
 	}
+
+	if h.dev {
+		js, _ := template.New("devmode").Parse(box.String("devMode.html"))
+		var buf bytes.Buffer
+		data := make(map[string]string)
+		data["url"] = "ws://" + r.Host + "/ws"
+		js.Execute(&buf, data)
+		s.DevMode = template.HTML(buf.String())
+	}
+
 	t.Execute(w, s)
 }
 
