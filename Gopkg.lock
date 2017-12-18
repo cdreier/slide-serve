@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/fsnotify/fsnotify"
+  packages = ["."]
+  revision = "629574ca2a5df945712d3079857300b5e4da0236"
+  version = "v1.4.2"
+
+[[projects]]
   name = "github.com/gobuffalo/envy"
   packages = ["."]
   revision = "e613c80275b86293880eddeb27417c9a7c670ff3"
@@ -37,9 +43,15 @@
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
   version = "v0.8.0"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = ["unix"]
+  revision = "571f7bbbe08da2a8955aed9d4db316e78630e9a3"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "28ad3f6b1d1428136118ab3a02ebb9f3d0452f8053ca54ee1935d158bdc26c2d"
+  inputs-digest = "34b81698c260fddba87fca36373175b70fd9907ced3183c9a084682526d8e0fa"
   solver-name = "gps-cdcl"
   solver-version = 1
