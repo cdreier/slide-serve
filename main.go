@@ -49,10 +49,12 @@ func main() {
 
 	h.parse()
 
-	http.HandleFunc("/", h.handler)
 	if *devMode {
 		http.HandleFunc("/ws", h.ws)
+		go startFileWatcher(*rootDir)
 	}
+
+	http.HandleFunc("/", h.handler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(*rootDir))))
 	http.HandleFunc("/favicon.ico", h.na)
 	fmt.Println("starting on port: " + *port + " for directory " + *rootDir)
