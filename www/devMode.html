@@ -11,6 +11,8 @@ window.addEventListener("load", function(evt) {
   }
   ws.onmessage = function(evt) {
     console.log("RESPONSE: " + evt.data);
+    // TODO change to target slide
+    location.reload()
   }
   ws.onerror = function(evt) {
     console.log("ERROR: " + evt.data);

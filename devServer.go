@@ -13,20 +13,24 @@ import (
 var upgrader = websocket.Upgrader{}
 
 func (h *holder) ws(w http.ResponseWriter, r *http.Request) {
-	c, err := upgrader.Upgrade(w, r, nil)
+	connection, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Print("upgrade:", err)
 		return
 	}
-	defer c.Close()
+	defer connection.Close()
+
+	// add connection to pool
+	h.connection = connection
+
 	for {
-		mt, message, err := c.ReadMessage()
+		mt, message, err := connection.ReadMessage()
 		if err != nil {
 			log.Println("read:", err)
 			break
 		}
 		log.Printf("recv: %s", message)
-		err = c.WriteMessage(mt, message)
+		err = connection.WriteMessage(mt, message)
 		if err != nil {
 			log.Println("write:", err)
 			break
@@ -34,7 +38,7 @@ func (h *holder) ws(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func debounce(interval time.Duration, input chan string, f func(arg string)) {
+func debounce(interval time.Duration, input chan string, cb func(arg string)) {
 	var item string
 	timer := time.NewTimer(interval)
 	for {
@@ -43,13 +47,13 @@ func debounce(interval time.Duration, input chan string, f func(arg string)) {
 			timer.Reset(interval)
 		case <-timer.C:
 			if item != "" {
-				f(item)
+				cb(item)
 			}
 		}
 	}
 }
 
-func startFileWatcher(dir string) {
+func (h *holder) startFileWatcher(dir string) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
@@ -58,7 +62,10 @@ func startFileWatcher(dir string) {
 
 	eventChan := make(chan string)
 	go debounce(time.Second, eventChan, func(name string) {
-		fmt.Println("RELOAD! ", name)
+		fmt.Println("reloading... ", name)
+		if h.connection != nil {
+			h.connection.WriteMessage(websocket.TextMessage, []byte("reload!"))
+		}
 	})
 
 	done := make(chan bool)
