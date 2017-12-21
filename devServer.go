@@ -63,13 +63,8 @@ func (h *holder) startFileWatcher(dir string) {
 	eventChan := make(chan string)
 	go debounce(time.Second, eventChan, func(name string) {
 		fmt.Println("reloading... ", name)
-<<<<<<< HEAD
 		if h.connection != nil {
 			h.connection.WriteMessage(websocket.TextMessage, []byte("reload!"))
-=======
-		for _, wsConnection := range h.connections {
-			wsConnection.WriteMessage(websocket.TextMessage, []byte("reload!"))
->>>>>>> ebb473eb4f1963f2282ab9020ba8ce2827de76c1
 		}
 	})
 
