@@ -14,14 +14,16 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/packr"
+	"github.com/gorilla/websocket"
 )
 
 type holder struct {
-	dir    string
-	title  string
-	slides []slide
-	styles string
-	dev    bool
+	dir         string
+	title       string
+	slides      []slide
+	styles      string
+	dev         bool
+	connections []*websocket.Conn
 }
 
 type slide struct {
@@ -51,7 +53,7 @@ func main() {
 
 	if *devMode {
 		http.HandleFunc("/ws", h.ws)
-		go startFileWatcher(*rootDir)
+		go h.startFileWatcher(*rootDir)
 	}
 
 	http.HandleFunc("/", h.handler)
