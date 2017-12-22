@@ -16,7 +16,7 @@ var upgrader = websocket.Upgrader{}
 func (h *holder) ws(w http.ResponseWriter, r *http.Request) {
 	connection, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("upgrade:", err)
+		log.Print("could not start dev-websocket:", err)
 		return
 	}
 	defer connection.Close()
@@ -27,7 +27,7 @@ func (h *holder) ws(w http.ResponseWriter, r *http.Request) {
 		// mt, message, err := connection.ReadMessage()
 		_, message, err := connection.ReadMessage()
 		if err != nil {
-			log.Println("read:", err)
+			// log.Println("read:", err)
 			break
 		}
 		log.Printf("recv: %s", message)
