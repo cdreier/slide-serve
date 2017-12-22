@@ -1,22 +1,22 @@
-# but wait...
+# But wait...
 
 # if i add a slide...
 at the beginning of my presentation?
 
 just go through all your styles 
 and images
-and change your slide numbers ;)
+and change your slide numbers?
 
-# i got your back!
+# I got your back!
 
-# styles in you slide
+# Styles in you slide...
 .  @css/customstyle.css
 
-# and background images 
+# ...and background images 
 . @img/example_bg.jpg
 
-# css added dynamicly 
-at the right point
+# CSS added dynamicly 
+with the correct slide numbers
 
 just use 'SLIDENUMBER' as placeholder 
   .slide-SLIDENUMBER .slide-content {
@@ -26,3 +26,6 @@ just use 'SLIDENUMBER' as placeholder
 .
 @img/example_bg.jpg
 @css/whiteHeadline.css
+
+# Dev server
+with auto-browser-reload!

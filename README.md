@@ -30,7 +30,7 @@ the `-dir` flag should point to the folder with your presentation
 
 * your slide-files should end with `.md` 
 * `styles.css` is automaticly added to your presentation
-* your presentation directory is routed to `http://localhost:8080/static/` so you can access local images
+* your presentation directory is routed to `http://localhost:8080/static/` so you can access local images or fonts - this is important for your custom stylesheets!
 
 ### syntax additions
 
