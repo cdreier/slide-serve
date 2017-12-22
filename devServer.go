@@ -20,21 +20,21 @@ func (h *holder) ws(w http.ResponseWriter, r *http.Request) {
 	}
 	defer connection.Close()
 
-	// add connection to pool
 	h.connection = connection
 
 	for {
-		mt, message, err := connection.ReadMessage()
+		// mt, message, err := connection.ReadMessage()
+		_, message, err := connection.ReadMessage()
 		if err != nil {
 			log.Println("read:", err)
 			break
 		}
 		log.Printf("recv: %s", message)
-		err = connection.WriteMessage(mt, message)
-		if err != nil {
-			log.Println("write:", err)
-			break
-		}
+		// err = connection.WriteMessage(mt, message)
+		// if err != nil {
+		// 	log.Println("write:", err)
+		// 	break
+		// }
 	}
 }
 
@@ -64,7 +64,10 @@ func (h *holder) startFileWatcher(dir string) {
 	go debounce(time.Second, eventChan, func(name string) {
 		fmt.Println("reloading... ", name)
 		if h.connection != nil {
-			h.connection.WriteMessage(websocket.TextMessage, []byte("reload!"))
+			jsonPayload := make(map[string]string)
+			jsonPayload["do"] = "reload"
+			jsonPayload["slide"] = "3" // TODO
+			h.connection.WriteJSON(jsonPayload)
 		}
 	})
 

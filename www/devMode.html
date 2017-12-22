@@ -10,9 +10,12 @@ window.addEventListener("load", function(evt) {
     ws = null;
   }
   ws.onmessage = function(evt) {
-    console.log("RESPONSE: " + evt.data);
-    // TODO change to target slide
-    location.reload()
+    var data = JSON.parse(evt.data)
+    console.log("RESPONSE: " + data);
+    if (data.do == "reload"){
+      location.hash = data.slide
+      location.reload()
+    }
   }
   ws.onerror = function(evt) {
     console.log("ERROR: " + evt.data);
