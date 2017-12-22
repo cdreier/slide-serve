@@ -1,7 +1,7 @@
 # but wait...
 
 # if i add a slide...
-at the beginning of my presentation
+at the beginning of my presentation?
 
 just go through all your styles 
 and images
@@ -19,4 +19,10 @@ and change your slide numbers ;)
 at the right point
 
 just use 'SLIDENUMBER' as placeholder 
-check 'androidbg.css' for example
+  .slide-SLIDENUMBER .slide-content {
+  }
+
+# AWESOME
+.
+@img/example_bg.jpg
+@css/whiteHeadline.css
