@@ -59,15 +59,16 @@ func findChangedSlide(h *holder) string {
 	h.parse()
 
 	for i, s := range prev {
-		if len(h.slides) >= i {
+		if len(h.slides)-1 >= i {
 			if s.hash != h.slides[i].hash {
 				return strconv.Itoa(i)
 			}
 		}
 	}
-	// no changes found so far, if new list is bigger,
+	// no changes found so far, if list length has changed,
 	// we predict one slide is added to the end
-	if len(h.slides) > len(prev) {
+	// (otherweise a hash check should find the change)
+	if len(h.slides) != len(prev) {
 		return strconv.Itoa(len(h.slides) - 1)
 	}
 	return "-"
