@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/gobuffalo/packr"
@@ -50,11 +51,11 @@ func (h *holder) parse() {
 
 		switch filepath.Ext(path) {
 		case ".css":
-			h.styles += string(content)
+			if filepath.Base(path) == "styles.css" {
+				h.styles += string(content)
+			}
 		case ".md":
 			h.generateSlides(string(content))
-			// case ".jpg", ".png", ".gif":
-			// 	styles += addStyleRule(path)
 		}
 
 		return nil
@@ -75,6 +76,12 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 		if s.image != "" {
 			styles += "\n"
 			styles += addStyleRule(s.image, i)
+		}
+
+		if s.styles != "" {
+			styles += "\n"
+			slideStyle := strings.Replace(s.styles, "SLIDENUMBER", strconv.Itoa(i), -1)
+			styles += slideStyle
 		}
 
 	}
@@ -128,8 +135,12 @@ func (h *holder) generateSlides(content string) {
 			if strings.HasPrefix(tmp, "@img") {
 				s.image = strings.Replace(tmp, "@img", "", -1)
 			} else if strings.HasPrefix(tmp, "@css") {
-				// TODO reading file? - need to add slide index
-				s.styles = strings.Replace(tmp, "@css", "", -1)
+				filename := strings.Replace(tmp, "@css", "", -1)
+				data, err := ioutil.ReadFile(h.dir + filename)
+				if err == nil {
+					s.styles = string(data)
+				}
+
 			} else {
 				s.content += "\t" + tmp + "\n"
 			}

@@ -15,4 +15,8 @@ and change your slide numbers ;)
 # and background images 
 . @img/example_bg.jpg
 
-# css added dynamicly at the right point
+# css added dynamicly 
+at the right point
+
+just use 'SLIDENUMBER' as placeholder 
+check 'androidbg.css' for example
