@@ -58,6 +58,12 @@ example slide with background image and stylesheet:
 
 example presentation: https://github.com/cdreier/slide-serve/tree/master/example
 
+### build your own
+
+i used [packr](https://github.com/gobuffalo/packr) to embedd the html template in the binary
+
+all the rest is basic go code, with dependencies managed by [dep](https://github.com/golang/dep)
+
 ## cli flags
 
 -dev  
