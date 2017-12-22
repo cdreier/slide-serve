@@ -1,0 +1,8 @@
+.slide-13 .slide-content {
+  background-image: url("http://trikita.co/slide/write_framed.png"),
+    url("http://trikita.co/slide/styles.gif"),
+    url("http://trikita.co/slide/illustrate_framed.png");
+  background-repeat: no-repeat;
+  background-size: 40%, 40%, 40%;
+  background-position: bottom left, bottom center, bottom right;
+}

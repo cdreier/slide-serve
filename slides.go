@@ -119,7 +119,7 @@ func (h *holder) generateSlides(content string) {
 	scanner := bufio.NewScanner(strings.NewReader(cleanup))
 	s := slide{}
 	for scanner.Scan() {
-		tmp := strings.Trim(scanner.Text(), "\t ")
+		tmp := strings.TrimRight(scanner.Text(), "\t ")
 		if tmp == "" {
 			s.buildHash()
 			h.slides = append(h.slides, s)

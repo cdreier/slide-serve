@@ -1,11 +1,18 @@
-# CSS backgrounds
-  .slide-12 {
-    background: url("icon.png"),
-                url("bg.png");
-    background-repeat: no-repeat, repeat;
-    background-size: 40%, auto;
-    background-position: bottom right;
-  }
+# but wait...
 
-# added dynamicly
-@img/example_bg.jpg
+# if i add a slide...
+at the beginning of my presentation
+
+just go through all your styles 
+and images
+and change your slide numbers ;)
+
+# i got your back!
+
+# styles in you slide
+.  @css/customstyle.css
+
+# and background images 
+. @img/example_bg.jpg
+
+# css added dynamicly at the right point
