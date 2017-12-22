@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
@@ -53,6 +54,25 @@ func debounce(interval time.Duration, input chan string, cb func(arg string)) {
 	}
 }
 
+func findChangedSlide(h *holder) string {
+	prev := h.slides
+	h.parse()
+
+	for i, s := range prev {
+		if len(h.slides) >= i {
+			if s.hash != h.slides[i].hash {
+				return strconv.Itoa(i)
+			}
+		}
+	}
+	// no changes found so far, if new list is bigger,
+	// we predict one slide is added to the end
+	if len(h.slides) > len(prev) {
+		return strconv.Itoa(len(h.slides) - 1)
+	}
+	return "-"
+}
+
 func (h *holder) startFileWatcher(dir string) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -64,9 +84,12 @@ func (h *holder) startFileWatcher(dir string) {
 	go debounce(time.Second, eventChan, func(name string) {
 		fmt.Println("reloading... ", name)
 		if h.connection != nil {
+
 			jsonPayload := make(map[string]string)
 			jsonPayload["do"] = "reload"
-			jsonPayload["slide"] = "3" // TODO
+			jsonPayload["slide"] = findChangedSlide(h)
+			fmt.Println("changed slide: ", jsonPayload["slide"])
+
 			h.connection.WriteJSON(jsonPayload)
 		}
 	})

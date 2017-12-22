@@ -3,6 +3,8 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -14,7 +16,20 @@ import (
 	"github.com/gobuffalo/packr"
 )
 
-type SlideContent struct {
+type slide struct {
+	content string
+	image   string
+	styles  string
+	hash    string
+}
+
+func (s *slide) buildHash() {
+	hasher := md5.New()
+	hasher.Write([]byte(s.content + s.styles + s.image))
+	s.hash = hex.EncodeToString(hasher.Sum(nil))
+}
+
+type slideContent struct {
 	Slides  string
 	Title   string
 	Styles  template.CSS
@@ -22,6 +37,7 @@ type SlideContent struct {
 }
 
 func (h *holder) parse() {
+	h.slides = make([]slide, 0)
 	filepath.Walk(h.dir, func(path string, info os.FileInfo, err error) error {
 		if isDir(path) {
 			return nil
@@ -63,7 +79,7 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	s := SlideContent{
+	s := slideContent{
 		Slides: slides,
 		Styles: template.CSS(styles),
 		Title:  h.title,
@@ -97,6 +113,7 @@ background-position: center;
 }
 
 func (h *holder) generateSlides(content string) {
+
 	cleanup := strings.Trim(content, "\n \t")
 
 	scanner := bufio.NewScanner(strings.NewReader(cleanup))
@@ -104,6 +121,7 @@ func (h *holder) generateSlides(content string) {
 	for scanner.Scan() {
 		tmp := strings.Trim(scanner.Text(), "\t ")
 		if tmp == "" {
+			s.buildHash()
 			h.slides = append(h.slides, s)
 			s = slide{}
 		} else {
@@ -117,6 +135,7 @@ func (h *holder) generateSlides(content string) {
 			}
 		}
 	}
+	s.buildHash()
 	h.slides = append(h.slides, s)
 
 }

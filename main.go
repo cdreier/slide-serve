@@ -19,12 +19,6 @@ type holder struct {
 	connection *websocket.Conn
 }
 
-type slide struct {
-	content string
-	image   string
-	styles  string
-}
-
 func main() {
 	port := flag.String("port", "8080", "http port the server is starting on")
 	rootDir := flag.String("dir", "example", "root dir of your presentation")
