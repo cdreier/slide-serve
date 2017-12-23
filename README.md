@@ -58,6 +58,8 @@ example slide with background image and stylesheet:
 
 example presentation: https://github.com/cdreier/slide-serve/tree/master/example
 
+> to see the example presentation, just run slide-serve without any flags
+
 ### build your own
 
 i used [packr](https://github.com/gobuffalo/packr) to embedd the html template in the binary
