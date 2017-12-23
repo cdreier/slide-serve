@@ -12,6 +12,7 @@ import (
 
 type holder struct {
 	dir        string
+	demo       bool
 	title      string
 	slides     []slide
 	styles     string
@@ -19,14 +20,22 @@ type holder struct {
 	connection *websocket.Conn
 }
 
+const exampleSlidesDirName = "example"
+
 func main() {
 	port := flag.String("port", "8080", "http port the server is starting on")
-	rootDir := flag.String("dir", "example", "root dir of your presentation")
+	rootDir := flag.String("dir", exampleSlidesDirName, "root dir of your presentation")
 	title := flag.String("title", "Slide", "html title")
 	devMode := flag.Bool("dev", false, "dev true to start a filewatcher and reload the edited slide")
 	flag.Parse()
 
-	if !dirExist(*rootDir) {
+	isDemo := false
+
+	if *rootDir == exampleSlidesDirName && !dirExist(*rootDir) {
+		isDemo = true
+		*devMode = false
+		*title = "Slide"
+	} else if !dirExist(*rootDir) {
 		log.Fatal("cannot find root directory :(")
 	}
 
@@ -34,6 +43,7 @@ func main() {
 		dir:   *rootDir,
 		title: *title,
 		dev:   *devMode,
+		demo:  isDemo,
 	}
 
 	h.parse()
