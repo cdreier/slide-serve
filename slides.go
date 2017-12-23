@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -40,27 +41,26 @@ type slideContent struct {
 func (h *holder) parse() {
 	if h.demo {
 		// example presentation
-		exampleBox := packr.NewBox("./" + exampleSlidesDirName)
+		exampleBox := packr.NewBox("./example")
 		fmt.Println("serving example presentation")
-		exampleBox.Walk(func(path string, file packr.File) error {
-			fmt.Println("path", path)
+		all := exampleBox.List()
+		sort.Strings(all)
+		for _, path := range all {
 			if filepath.Base(path) == "styles.css" {
-				fmt.Println("adding style")
 				h.styles += exampleBox.String(path)
 			}
 
 			if filepath.Ext(path) == ".md" {
-				fmt.Println("md")
 				h.generateSlides(exampleBox.String(path))
 			}
-			return nil
-		})
+		}
+
 	} else {
 		// user presentation
 		h.slides = make([]slide, 0)
 		filepath.Walk(h.dir, func(path string, info os.FileInfo, err error) error {
-			if isDir(path) {
-				return nil
+			if info == nil || info.IsDir() {
+				return filepath.SkipDir
 			}
 			// reading all the files, check file ext before reading?
 			content, err := ioutil.ReadFile(path)
