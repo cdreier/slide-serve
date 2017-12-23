@@ -60,7 +60,7 @@ func (h *holder) parse() {
 		h.slides = make([]slide, 0)
 		filepath.Walk(h.dir, func(path string, info os.FileInfo, err error) error {
 			if info == nil || info.IsDir() {
-				return filepath.SkipDir
+				return nil
 			}
 			// reading all the files, check file ext before reading?
 			content, err := ioutil.ReadFile(path)
