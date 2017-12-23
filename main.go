@@ -12,6 +12,7 @@ import (
 
 type holder struct {
 	dir        string
+	demo       bool
 	title      string
 	slides     []slide
 	styles     string
@@ -28,20 +29,21 @@ func main() {
 	devMode := flag.Bool("dev", false, "dev true to start a filewatcher and reload the edited slide")
 	flag.Parse()
 
-	if !dirExist(*rootDir) {
-		if *rootDir != exampleSlidesDirName {
-			log.Fatal("cannot find root directory :(")
-		} else {
-			// start embedded example presentation
-			*devMode = false
-			*title = "Slide"
-		}
+	isDemo := false
+
+	if *rootDir == "example" && !dirExist(*rootDir) {
+		isDemo = true
+		*devMode = false
+		*title = "Slide"
+	} else if !dirExist(*rootDir) {
+		log.Fatal("cannot find root directory :(")
 	}
 
 	h := holder{
 		dir:   *rootDir,
 		title: *title,
 		dev:   *devMode,
+		demo:  isDemo,
 	}
 
 	h.parse()

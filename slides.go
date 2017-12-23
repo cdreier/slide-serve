@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -38,45 +39,48 @@ type slideContent struct {
 }
 
 func (h *holder) parse() {
-	// example presentation
-	if h.dir == exampleSlidesDirName {
-		exampleBox := packr.NewBox("./" + exampleSlidesDirName)
-		exampleBox.Walk(func(path string, file packr.File) error {
-			content := exampleBox.String(path)
-			h.fileParser(path, content)
-			return nil
-		})
+	if h.demo {
+		// example presentation
+		exampleBox := packr.NewBox("./example")
+		fmt.Println("serving example presentation")
+		all := exampleBox.List()
+		sort.Strings(all)
+		for _, path := range all {
+			if filepath.Base(path) == "styles.css" {
+				h.styles += exampleBox.String(path)
+			}
+
+			if filepath.Ext(path) == ".md" {
+				h.generateSlides(exampleBox.String(path))
+			}
+		}
+
 	} else {
 		// user presentation
 		h.slides = make([]slide, 0)
 		filepath.Walk(h.dir, func(path string, info os.FileInfo, err error) error {
-			if isDir(path) {
-				return nil
+			if info == nil || info.IsDir() {
+				return filepath.SkipDir
 			}
+			// reading all the files, check file ext before reading?
 			content, err := ioutil.ReadFile(path)
 			if err != nil {
 				fmt.Println("cannot read... skipping ", path)
 				return nil
 			}
-			h.fileParser(path, string(content))
+
+			if filepath.Base(path) == "styles.css" {
+				h.styles += string(content)
+			}
+
+			if filepath.Ext(path) == ".md" {
+				h.generateSlides(string(content))
+			}
+
 			return nil
 		})
 	}
 
-}
-
-func (h *holder) fileParser(path string, content string) {
-
-	switch filepath.Ext(path) {
-	case ".css":
-		if filepath.Base(path) == "styles.css" {
-			h.styles += content
-		}
-	case ".md":
-		h.generateSlides(content)
-	}
-
-	return
 }
 
 func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
