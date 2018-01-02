@@ -3,8 +3,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"crypto/md5"
-	"encoding/hex"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -26,9 +24,7 @@ type slide struct {
 }
 
 func (s *slide) buildHash() {
-	hasher := md5.New()
-	hasher.Write([]byte(s.content + s.styles + s.image))
-	s.hash = hex.EncodeToString(hasher.Sum(nil))
+	s.hash = md5Hash(s.content + s.styles + s.image)
 }
 
 type slideContent struct {
