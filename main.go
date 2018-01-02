@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"github.com/gorilla/websocket"
-	"github.com/mdp/qrterminal"
 )
 
 type holder struct {
@@ -26,14 +25,14 @@ func main() {
 	rootDir := flag.String("dir", "example", "root dir of your presentation")
 	title := flag.String("title", "Slide", "html title")
 	devMode := flag.Bool("dev", false, "dev true to start a filewatcher and reload the edited slide")
-	control := flag.Bool("control", false, "attach controller with peer to peer ")
+	// control := flag.Bool("control", false, "attach controller with peer to peer ")
 	flag.Parse()
 
 	isDemo := false
 
-	if *control {
-		qrterminal.GenerateHalfBlock("http://drailing.net", qrterminal.L, os.Stdout)
-	}
+	// if *control {
+	// 	qrterminal.GenerateHalfBlock("http://drailing.net", qrterminal.L, os.Stdout)
+	// }
 
 	if *rootDir == "example" && !dirExist(*rootDir) {
 		isDemo = true
