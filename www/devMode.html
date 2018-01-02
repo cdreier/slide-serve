@@ -12,8 +12,10 @@ window.addEventListener("load", function(evt) {
   ws.onmessage = function(evt) {
     var data = JSON.parse(evt.data)
     console.log("RESPONSE: ", data);
-    if (data.do == "reload" && data.slide != "-"){
+    if (data.slide != "-"){
       location.hash = data.slide
+    }
+    if (data.do == "reload"){
       location.reload()
     }
   }
