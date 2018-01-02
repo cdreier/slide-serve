@@ -58,6 +58,7 @@ func (h *holder) parse() {
 	} else {
 		// user presentation
 		h.slides = make([]slide, 0)
+		h.styles = ""
 		filepath.Walk(h.dir, func(path string, info os.FileInfo, err error) error {
 			if info == nil || info.IsDir() {
 				return nil
