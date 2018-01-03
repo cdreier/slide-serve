@@ -10,7 +10,7 @@ Headers start with #
 
 # #3
 Emphasize *words*
-surrounding them with **asterisks**
+.surrounding them with *asterisks*
 
 # #4
 Indent code with 2 spaces

@@ -28,7 +28,7 @@ func (s *slide) buildHash() {
 }
 
 type slideContent struct {
-	Slides  string
+	Slides  template.HTML
 	Title   string
 	Styles  template.CSS
 	DevMode template.HTML
@@ -88,8 +88,7 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 	styles := h.styles
 
 	for i, s := range h.slides {
-		slides += s.content
-		slides += "\n"
+		slides += renderSlide(s.content, i)
 
 		if s.image != "" {
 			styles += "\n"
@@ -105,7 +104,7 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	s := slideContent{
-		Slides: slides,
+		Slides: template.HTML(slides),
 		Styles: template.CSS(styles),
 		Title:  h.title,
 	}
@@ -160,7 +159,7 @@ func (h *holder) generateSlides(content string) {
 				}
 
 			} else {
-				s.content += "\t" + tmp + "\n"
+				s.content += tmp + "\n"
 			}
 		}
 	}
