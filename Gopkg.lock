@@ -2,6 +2,33 @@
 
 
 [[projects]]
+  name = "github.com/alecthomas/chroma"
+  packages = [
+    ".",
+    "formatters",
+    "formatters/html",
+    "lexers",
+    "styles"
+  ]
+  revision = "e0f32fbcb59bc99c521910291b7ba8ecdb17ca34"
+  version = "v0.2.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/danwakefield/fnmatch"
+  packages = ["."]
+  revision = "cbb64ac3d964b81592e64f957ad53df015803288"
+
+[[projects]]
+  name = "github.com/dlclark/regexp2"
+  packages = [
+    ".",
+    "syntax"
+  ]
+  revision = "487489b64fb796de2e55f4e8a4ad1e145f80e957"
+  version = "v1.1.6"
+
+[[projects]]
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
   revision = "629574ca2a5df945712d3079857300b5e4da0236"
@@ -52,6 +79,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "34b81698c260fddba87fca36373175b70fd9907ced3183c9a084682526d8e0fa"
+  inputs-digest = "19dff9ead5d425747aa5bc6ae81bd6dd522f1bdc87a2e988fe9b339bc2a5d73f"
   solver-name = "gps-cdcl"
   solver-version = 1

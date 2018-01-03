@@ -3,7 +3,14 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
+	"os"
 	"strings"
+
+	"github.com/alecthomas/chroma"
+	"github.com/alecthomas/chroma/formatters"
+	"github.com/alecthomas/chroma/lexers"
+	"github.com/alecthomas/chroma/styles"
 )
 
 const codeMarker = "##CODE##"
@@ -56,9 +63,12 @@ func renderSlide(content string, index int) string {
 	marker := strings.Count(slideMarkup, codeMarker)
 	slideMarkup = strings.Replace(slideMarkup, codeMarker, "", marker-1)
 	// add highlights https://github.com/alecthomas/chroma
-	slideMarkup = strings.Replace(slideMarkup, codeMarker, fmt.Sprintf(`
-		<pre>%s</pre>
-	`, code), 1)
+	if code != "" {
+		getHighlightedMarkup(code)
+		// slideMarkup = strings.Replace(slideMarkup, codeMarker, fmt.Sprintf(`
+		// 	<pre>%s</pre>
+		// `, code), 1)
+	}
 
 	slideMarkup += endSlide()
 	return slideMarkup
@@ -81,4 +91,29 @@ func endSlide() string {
 		</div>
 		</div>
 	`
+}
+
+func getHighlightedMarkup(code string) {
+	lexer := lexers.Analyse(code)
+	if lexer == nil {
+		lexer = lexers.Fallback
+	}
+	lexer = chroma.Coalesce(lexer)
+
+	style := styles.Get("swapoff")
+	if style == nil {
+		style = styles.Fallback
+	}
+
+	formatter := formatters.Get("html")
+	// formatter := html.New()
+	if formatter == nil {
+		formatter = formatters.Fallback
+	}
+
+	iterator, err := lexer.Tokenise(nil, code)
+	err = formatter.Format(os.Stdout, style, iterator)
+	if err != nil {
+		log.Println("err", err)
+	}
 }
