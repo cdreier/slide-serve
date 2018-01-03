@@ -65,9 +65,9 @@ func renderSlide(content string, index int) string {
 	// add highlights https://github.com/alecthomas/chroma
 	if code != "" {
 		getHighlightedMarkup(code)
-		// slideMarkup = strings.Replace(slideMarkup, codeMarker, fmt.Sprintf(`
-		// 	<pre>%s</pre>
-		// `, code), 1)
+		slideMarkup = strings.Replace(slideMarkup, codeMarker, fmt.Sprintf(`
+			<pre>%s</pre>
+		`, code), 1)
 	}
 
 	slideMarkup += endSlide()
@@ -94,18 +94,23 @@ func endSlide() string {
 }
 
 func getHighlightedMarkup(code string) {
+
 	lexer := lexers.Analyse(code)
+
 	if lexer == nil {
+		log.Println("could not find correct lexer")
 		lexer = lexers.Fallback
 	}
 	lexer = chroma.Coalesce(lexer)
 
 	style := styles.Get("swapoff")
 	if style == nil {
+		log.Println("using fallback styles")
 		style = styles.Fallback
 	}
 
-	formatter := formatters.Get("html")
+	// formatter := formatters.Get("html")
+	formatter := formatters.Get("noop")
 	// formatter := html.New()
 	if formatter == nil {
 		formatter = formatters.Fallback
