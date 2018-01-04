@@ -21,6 +21,7 @@ Indent code with 2 spaces
     y -= m < 3;
     return (y + y/4 - y/100 + y/400 + t[m-1] + d) % 7;
   }
+@code/javascript
 
 # #5
 Lines starting with a dot

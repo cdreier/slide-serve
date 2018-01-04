@@ -2,20 +2,21 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/formatters"
+	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
 )
 
 const codeMarker = "##CODE##"
 
-func renderSlide(content string, index int) string {
+func renderSlide(s slide, index int) string {
+	content := s.content
 	scanner := bufio.NewScanner(strings.NewReader(content))
 	slideMarkup := startSlide(index)
 	code := ""
@@ -60,14 +61,14 @@ func renderSlide(content string, index int) string {
 		}
 	}
 
-	marker := strings.Count(slideMarkup, codeMarker)
-	slideMarkup = strings.Replace(slideMarkup, codeMarker, "", marker-1)
-	// add highlights https://github.com/alecthomas/chroma
+	markers := strings.Count(slideMarkup, codeMarker)
+	slideMarkup = strings.Replace(slideMarkup, codeMarker, "", markers-1)
 	if code != "" {
-		getHighlightedMarkup(code)
-		slideMarkup = strings.Replace(slideMarkup, codeMarker, fmt.Sprintf(`
-			<pre>%s</pre>
-		`, code), 1)
+		highlightedCode, cssClasses := getHighlightedMarkup(code, s.code)
+		slideMarkup = strings.Replace(slideMarkup, codeMarker, highlightedCode, 1)
+		slideMarkup += fmt.Sprintf(`
+			<style>%s</style>
+		`, cssClasses)
 	}
 
 	slideMarkup += endSlide()
@@ -93,12 +94,12 @@ func endSlide() string {
 	`
 }
 
-func getHighlightedMarkup(code string) {
+func getHighlightedMarkup(code string, lang string) (string, string) {
 
-	lexer := lexers.Analyse(code)
+	lexer := lexers.Get(lang)
 
 	if lexer == nil {
-		log.Println("could not find correct lexer")
+		log.Println("could not find correct lexer for", code)
 		lexer = lexers.Fallback
 	}
 	lexer = chroma.Coalesce(lexer)
@@ -110,15 +111,25 @@ func getHighlightedMarkup(code string) {
 	}
 
 	// formatter := formatters.Get("html")
-	formatter := formatters.Get("noop")
-	// formatter := html.New()
-	if formatter == nil {
-		formatter = formatters.Fallback
-	}
+	// formatter := formatters.Get("noop")
+	formatter := html.New(html.WithClasses())
+	// if formatter == nil {
+	// 	formatter = formatters.Fallback
+	// }
+
+	highlightedCode := new(bytes.Buffer)
+	cssClasses := new(bytes.Buffer)
 
 	iterator, err := lexer.Tokenise(nil, code)
-	err = formatter.Format(os.Stdout, style, iterator)
+	err = formatter.Format(highlightedCode, style, iterator)
 	if err != nil {
 		log.Println("err", err)
+		return fmt.Sprintf(`
+			<pre>%s</pre>
+		`, code), ""
 	}
+
+	formatter.WriteCSS(cssClasses, style)
+
+	return highlightedCode.String(), cssClasses.String()
 }

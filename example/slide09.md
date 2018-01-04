@@ -9,6 +9,7 @@
 ..slide-N, where N is slide number
 
 # Example
+@code/css
 .
   .slide-10 h1 {
     color: #fff;

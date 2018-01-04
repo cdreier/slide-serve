@@ -18,6 +18,7 @@ import (
 
 type slide struct {
 	content string
+	code    string
 	image   string
 	styles  string
 	hash    string
@@ -88,7 +89,7 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 	styles := h.styles
 
 	for i, s := range h.slides {
-		slides += renderSlide(s.content, i)
+		slides += renderSlide(s, i)
 
 		if s.image != "" {
 			styles += "\n"
@@ -158,6 +159,8 @@ func (h *holder) generateSlides(content string) {
 					s.styles = string(data)
 				}
 
+			} else if strings.HasPrefix(tmp, "@code/") {
+				s.code = strings.Replace(tmp, "@code/", "", -1)
 			} else {
 				s.content += tmp + "\n"
 			}
