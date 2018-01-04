@@ -1,12 +1,17 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 
+	"github.com/gobuffalo/packr"
 	"github.com/gorilla/websocket"
 )
 
@@ -17,6 +22,7 @@ type holder struct {
 	slides     []slide
 	styles     string
 	dev        bool
+	codeTheme  string
 	connection *websocket.Conn
 }
 
@@ -25,6 +31,7 @@ func main() {
 	rootDir := flag.String("dir", "example", "root dir of your presentation")
 	title := flag.String("title", "Slide", "html title")
 	devMode := flag.Bool("dev", false, "dev true to start a filewatcher and reload the edited slide")
+	codeTheme := flag.String("syntaxhl", "monokai", "code highlighter theme")
 	// control := flag.Bool("control", false, "attach controller with peer to peer ")
 	flag.Parse()
 
@@ -43,10 +50,11 @@ func main() {
 	}
 
 	h := holder{
-		dir:   *rootDir,
-		title: *title,
-		dev:   *devMode,
-		demo:  isDemo,
+		dir:       *rootDir,
+		title:     *title,
+		dev:       *devMode,
+		demo:      isDemo,
+		codeTheme: *codeTheme,
 	}
 
 	h.parse()
@@ -65,6 +73,47 @@ func main() {
 
 func (h *holder) na(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
+}
+
+func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
+	box := packr.NewBox("./www")
+	t, _ := template.New("slide").Parse(box.String("slide.html"))
+
+	slides := ""
+	styles := h.styles
+
+	for i, s := range h.slides {
+		slides += renderSlide(s, i, h.codeTheme)
+
+		if s.image != "" {
+			styles += "\n"
+			styles += addStyleRule(s.image, i)
+		}
+
+		if s.styles != "" {
+			styles += "\n"
+			slideStyle := strings.Replace(s.styles, "SLIDENUMBER", strconv.Itoa(i), -1)
+			styles += slideStyle
+		}
+
+	}
+
+	s := slideContent{
+		Slides: template.HTML(slides),
+		Styles: template.CSS(styles),
+		Title:  h.title,
+	}
+
+	if h.dev {
+		js, _ := template.New("devmode").Parse(box.String("devMode.html"))
+		var buf bytes.Buffer
+		data := make(map[string]string)
+		data["url"] = "ws://" + r.Host + "/ws"
+		js.Execute(&buf, data)
+		s.DevMode = template.HTML(buf.String())
+	}
+
+	t.Execute(w, s)
 }
 
 func isDir(dir string) bool {

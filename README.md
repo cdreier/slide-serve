@@ -13,6 +13,7 @@ for really, really fast slide-development i created this small server
 * add styles and background images next to your content
   * no hardcoded slide-numbers in css
   * don't count your slides, i'll do it for you ;)
+* syntax highlighter with [chroma](https://github.com/alecthomas/chroma)
 * use local images
 
 ## usage
@@ -34,13 +35,16 @@ the `-dir` flag should point to the folder with your presentation
 
 ### syntax additions
 
-`@img/imagename.gif` and `@css/stylesheet.css`
+`@img/imagename.gif` - `@css/stylesheet.css` - `@code/language`
 
 the path is relative to your presentation directory, if you like to create an image folder it would change to `@img/images/imagename.gif`
+
+with die `@code` annotation, the code-formatting is set for this slide 
 
 note: instead of writing the harcoded slide number, you should use the SLIDENUMBER placeholder
 
 ``` css
+@code/css
 .slide-SLIDENUMBER h1 { 
   color: #fff; 
   text-shadow: 1px 1px 3px #333; 
@@ -49,7 +53,7 @@ note: instead of writing the harcoded slide number, you should use the SLIDENUMB
 
 example slide with background image and stylesheet:
 
-```
+``` md
 # AWESOME
 .
 @img/example_bg.jpg
@@ -59,6 +63,29 @@ example slide with background image and stylesheet:
 example presentation: https://github.com/cdreier/slide-serve/tree/master/example
 
 > to see the example presentation, just run slide-serve without any flags
+
+
+### syntax highlighter
+
+i used [chroma](https://github.com/alecthomas/chroma) for syntax highlightning. 
+
+just tell me what language you are using on your slide (with `@code/lang`) and you are good to go.
+
+with the `-syntaxhl` start flag you can set the highlighter theme (there is a [list](https://github.com/alecthomas/chroma/tree/master/styles) with all the themes). the default is monokai
+
+example (the position of the `@code` annotation does not matter)
+
+``` md
+# CSS backgrounds
+@code/css
+  .slide-12 {
+    background: url("icon.png"),
+                url("bg.png");
+    background-repeat: no-repeat, repeat;
+    background-size: 40%, auto;
+    background-position: bottom right;
+  }
+```
 
 ### build your own
 
@@ -77,6 +104,9 @@ all the rest is basic go code, with dependencies managed by [dep](https://github
 
 -port 
 * http port the server is starting on (default "8080")
+
+-syntaxhl
+* string with the highlighter theme for your code (default "monokai")
 
 -title 
 * html title in the browser (default "Slide")

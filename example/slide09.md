@@ -18,6 +18,7 @@
 .
 
 # CSS backgrounds
+@code/css
   .slide-12 {
     background: url("icon.png"),
                 url("bg.png");

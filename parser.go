@@ -2,15 +2,12 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
 	"html/template"
 	"io/ioutil"
-	"net/http"
 	"os"
 	"path/filepath"
 	"sort"
-	"strconv"
 	"strings"
 
 	"github.com/gobuffalo/packr"
@@ -79,47 +76,6 @@ func (h *holder) parse() {
 		})
 	}
 
-}
-
-func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
-	box := packr.NewBox("./www")
-	t, _ := template.New("slide").Parse(box.String("slide.html"))
-
-	slides := ""
-	styles := h.styles
-
-	for i, s := range h.slides {
-		slides += renderSlide(s, i)
-
-		if s.image != "" {
-			styles += "\n"
-			styles += addStyleRule(s.image, i)
-		}
-
-		if s.styles != "" {
-			styles += "\n"
-			slideStyle := strings.Replace(s.styles, "SLIDENUMBER", strconv.Itoa(i), -1)
-			styles += slideStyle
-		}
-
-	}
-
-	s := slideContent{
-		Slides: template.HTML(slides),
-		Styles: template.CSS(styles),
-		Title:  h.title,
-	}
-
-	if h.dev {
-		js, _ := template.New("devmode").Parse(box.String("devMode.html"))
-		var buf bytes.Buffer
-		data := make(map[string]string)
-		data["url"] = "ws://" + r.Host + "/ws"
-		js.Execute(&buf, data)
-		s.DevMode = template.HTML(buf.String())
-	}
-
-	t.Execute(w, s)
 }
 
 func addStyleRule(filename string, slideNumber int) string {

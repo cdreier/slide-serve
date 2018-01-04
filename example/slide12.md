@@ -21,11 +21,16 @@ with the correct slide numbers
 just use 'SLIDENUMBER' as placeholder 
   .slide-SLIDENUMBER .slide-content {
   }
+@code/css
 
 # AWESOME
 .
 @img/example_bg.jpg
 @css/whiteHeadline.css
+
+# syntax highlightning
+just tell me what language
+with @code/javascript
 
 # Dev server
 with auto-browser-reload!

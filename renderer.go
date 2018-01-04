@@ -15,7 +15,7 @@ import (
 
 const codeMarker = "##CODE##"
 
-func renderSlide(s slide, index int) string {
+func renderSlide(s slide, index int, codeTheme string) string {
 	content := s.content
 	scanner := bufio.NewScanner(strings.NewReader(content))
 	slideMarkup := startSlide(index)
@@ -64,7 +64,7 @@ func renderSlide(s slide, index int) string {
 	markers := strings.Count(slideMarkup, codeMarker)
 	slideMarkup = strings.Replace(slideMarkup, codeMarker, "", markers-1)
 	if code != "" {
-		highlightedCode, cssClasses := getHighlightedMarkup(code, s.code)
+		highlightedCode, cssClasses := getHighlightedMarkup(code, s.code, codeTheme)
 		slideMarkup = strings.Replace(slideMarkup, codeMarker, highlightedCode, 1)
 		slideMarkup += fmt.Sprintf(`
 			<style>%s</style>
@@ -94,17 +94,17 @@ func endSlide() string {
 	`
 }
 
-func getHighlightedMarkup(code string, lang string) (string, string) {
+func getHighlightedMarkup(code string, lang string, codeTheme string) (string, string) {
 
 	lexer := lexers.Get(lang)
 
 	if lexer == nil {
-		log.Println("could not find correct lexer for", code)
+		// log.Println("could not find correct lexer for", code)
 		lexer = lexers.Fallback
 	}
 	lexer = chroma.Coalesce(lexer)
 
-	style := styles.Get("swapoff")
+	style := styles.Get(codeTheme)
 	if style == nil {
 		log.Println("using fallback styles")
 		style = styles.Fallback
@@ -123,7 +123,6 @@ func getHighlightedMarkup(code string, lang string) (string, string) {
 	iterator, err := lexer.Tokenise(nil, code)
 	err = formatter.Format(highlightedCode, style, iterator)
 	if err != nil {
-		log.Println("err", err)
 		return fmt.Sprintf(`
 			<pre>%s</pre>
 		`, code), ""
