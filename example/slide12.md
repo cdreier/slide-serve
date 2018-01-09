@@ -28,6 +28,9 @@ just use 'SLIDENUMBER' as placeholder
 @img/example_bg.jpg
 @css/whiteHeadline.css
 
+# javascript!
+@js/jsdemo.js
+
 # syntax highlightning
 just tell me what language
 with @code/javascript

@@ -14,15 +14,16 @@ import (
 )
 
 type slide struct {
-	content string
-	code    string
-	image   string
-	styles  string
-	hash    string
+	content    string
+	code       string
+	image      string
+	styles     string
+	javascript string
+	hash       string
 }
 
 func (s *slide) buildHash() {
-	s.hash = md5Hash(s.content + s.styles + s.image)
+	s.hash = md5Hash(s.content + s.styles + s.image + s.javascript)
 }
 
 type slideContent struct {
@@ -113,6 +114,13 @@ func (h *holder) generateSlides(content string) {
 				data, err := ioutil.ReadFile(h.dir + filename)
 				if err == nil {
 					s.styles = string(data)
+				}
+
+			} else if strings.HasPrefix(tmp, "@js") {
+				filename := strings.Replace(tmp, "@js", "", -1)
+				data, err := ioutil.ReadFile(h.dir + filename)
+				if err == nil {
+					s.javascript = string(data)
 				}
 
 			} else if strings.HasPrefix(tmp, "@code/") {

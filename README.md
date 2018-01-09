@@ -35,7 +35,10 @@ the `-dir` flag should point to the folder with your presentation
 
 ### syntax additions
 
-`@img/imagename.gif` - `@css/stylesheet.css` - `@code/language`
+`@img/imagename.gif`  
+`@css/stylesheet.css`  
+`@js/jsfile.js`  
+`@code/language`  
 
 the path is relative to your presentation directory, if you like to create an image folder it would change to `@img/images/imagename.gif`
 
@@ -59,6 +62,25 @@ example slide with background image and stylesheet:
 @img/example_bg.jpg
 @css/whiteHeadline.css
 ```
+
+with the `@js` annotation, you can add javascript to your slide - the code will run in the moment you enter the slide.
+
+``` md
+# javascript!
+@js/jsdemo.js
+```
+
+2 variables are available: `_slide` is your current slide-div, and `_slideIndex` - is your slide index... obviously
+
+the jsdemo looks like
+
+```js
+_slide.style.backgroundColor = "red"
+setTimeout(() => {
+  _slide.style.backgroundColor = "inherit"
+}, 1000)
+```
+
 
 example presentation: https://github.com/cdreier/slide-serve/tree/master/example
 

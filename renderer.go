@@ -71,6 +71,18 @@ func renderSlide(s slide, index int, codeTheme string) string {
 		`, cssClasses)
 	}
 
+	if s.javascript != "" {
+		slideMarkup += fmt.Sprintf(`
+			<script>
+				window.addEventListener('slideEnter_%d', function(){
+					var _slideIndex = %d;
+					var _slide = document.querySelectorAll(".slide-" + _slideIndex);
+					_slide = _slide[0];
+					%s
+				})
+			</script>
+		`, index, index, s.javascript)
+	}
 	slideMarkup += endSlide()
 	return slideMarkup
 }

@@ -33,6 +33,9 @@
             el.style.visibility = 'hidden';
           }
         }
+
+        var evt = new Event("slideEnter_"+slideIndex)
+        window.dispatchEvent(evt)
       }
 
       function next() {
@@ -45,7 +48,6 @@
 
       window.onload = function() {
         resize();
-        // render(document.getElementById('slide').innerHTML);
         goTo(window.location.hash.substring(1)||0);
         window.onclick = next;
         window.onresize = resize;
