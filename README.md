@@ -115,6 +115,56 @@ i used [packr](https://github.com/gobuffalo/packr) to embedd the html template i
 
 all the rest is basic go code, with dependencies managed by [dep](https://github.com/golang/dep)
 
+## useful snippets
+
+### restarting gifs
+
+as gifs are looping in the background, this script reloads the gif every time you enter the slide
+
+```js
+// restartGif.js
+function getBackgroundImageUrl(element){
+  var styles = getComputedStyle(element)
+  return styles.backgroundImage.replace("url(\"", "").replace("\")", "")
+}
+var url = getBackgroundImageUrl(_slide)
+var reloadUrl = url + "?" + Math.random()
+_slide.style.backgroundImage = "url('" + reloadUrl + "')"
+```
+
+and in an example slide
+
+```
+.
+@img/funnyCat.gif
+@js/restartGif.js
+```
+
+### no image scaling
+
+in the past, i needed a down-scaling of the images - if you want to reset this behaviour, add this to your `styles.css`
+
+```css
+.slide {
+  background-size: unset !important;
+}
+```
+
+### add a logo on every slide
+
+you can add more background images - so we add one default image in the `styles.css`
+
+```css
+body {
+  font-family: Vollkorn;
+  background-color: #e2e4e6;
+  background-image: url("/static/images/your_logo.png");
+  background-repeat: no-repeat;
+  background-position: right 10px top 10px;
+  background-size: 15%, auto;
+}
+```
+
 ## cli flags
 
 -dev  
