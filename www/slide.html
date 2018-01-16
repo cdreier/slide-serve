@@ -48,7 +48,8 @@
 
       window.onload = function() {
         resize();
-        goTo(window.location.hash.substring(1)||0);
+        var tmpSlideFromHash = parseInt(window.location.hash.substring(1)||0, 10)
+        goTo(tmpSlideFromHash);
         window.onclick = next;
         window.onresize = resize;
         window.onkeydown = function(e) {

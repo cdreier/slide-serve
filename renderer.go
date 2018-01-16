@@ -95,7 +95,7 @@ func headline(txt string) string {
 
 func startSlide(index int) string {
 	return fmt.Sprintf(`
-		<div class="slide slide-%d">
+		<div class="slide slide-%d" style="visibility: hidden;">
 		<div class="slide-content">
 	`, index)
 }
