@@ -1,0 +1,21 @@
+@media print {
+  @page {size: landscape}
+	body { transform: none !important; }
+	.slide-root { 
+		width: 100%; 
+  }
+	.slide-content { transform: none !important; }
+	.slide {
+		display: flex;
+		flex: 1;
+		justify-content: center;
+		overflow: hidden;
+    visibility: visible !important;
+
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		width:100%;
+		height: 500pt;
+		page-break-before: always;
+	}
+
+}

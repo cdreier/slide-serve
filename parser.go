@@ -27,10 +27,11 @@ func (s *slide) buildHash() {
 }
 
 type slideContent struct {
-	Slides  template.HTML
-	Title   string
-	Styles  template.CSS
-	DevMode template.HTML
+	Slides     template.HTML
+	Title      string
+	Styles     template.CSS
+	PrintStyle template.CSS
+	DevMode    template.HTML
 }
 
 func (h *holder) parse() {
