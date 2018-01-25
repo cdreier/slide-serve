@@ -29,6 +29,7 @@ func (s *slide) buildHash() {
 type slideContent struct {
 	Slides     template.HTML
 	Title      string
+	SlideRatio string
 	Styles     template.CSS
 	PrintStyle template.CSS
 	DevMode    template.HTML

@@ -204,6 +204,9 @@ if something wont fit with your presentation styles, you can overwrite the print
 -syntaxhl
 * string with the highlighter theme for your code (default "monokai")
 
+-ratio
+* slide ratio, possible values: 4x3, 16x9 or 16x10 (default "16x9")
+
 -title 
 * html title in the browser (default "Slide")
 

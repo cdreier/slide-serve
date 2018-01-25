@@ -24,6 +24,7 @@ type holder struct {
 	dev        bool
 	pdfPrint   bool
 	codeTheme  string
+	slideRatio string
 	connection *websocket.Conn
 }
 
@@ -34,6 +35,7 @@ func main() {
 	devMode := flag.Bool("dev", false, "dev true to start a filewatcher and reload the edited slide")
 	codeTheme := flag.String("syntaxhl", "monokai", "code highlighter theme")
 	pdfPrint := flag.Bool("pdf", false, "printing a pdf")
+	slideRatio := flag.String("ratio", "16x9", "ratio of your slides, 4x3, 16x9 or 16x10") // slide-4x3 slide-16x9 slide-16x10
 	// control := flag.Bool("control", false, "attach controller with peer to peer ")
 	flag.Parse()
 
@@ -52,12 +54,13 @@ func main() {
 	}
 
 	h := holder{
-		dir:       *rootDir,
-		title:     *title,
-		dev:       *devMode,
-		demo:      isDemo,
-		codeTheme: *codeTheme,
-		pdfPrint:  *pdfPrint,
+		dir:        *rootDir,
+		title:      *title,
+		dev:        *devMode,
+		demo:       isDemo,
+		codeTheme:  *codeTheme,
+		pdfPrint:   *pdfPrint,
+		slideRatio: *slideRatio,
 	}
 
 	h.parse()
@@ -111,6 +114,7 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 		Styles:     template.CSS(styles),
 		PrintStyle: template.CSS(printStyles),
 		Title:      h.title,
+		SlideRatio: h.slideRatio,
 	}
 
 	if h.dev {
