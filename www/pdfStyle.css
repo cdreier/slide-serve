@@ -22,4 +22,11 @@
 		page-break-before: always;
 	}
 
+	.slide h1 {
+		font-size: 8rem !important;
+	}
+	.slide p {
+		font-size: 2rem !important;
+	}
+
 }

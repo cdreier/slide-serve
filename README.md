@@ -165,6 +165,30 @@ body {
 }
 ```
 
+## printing
+
+the default print styles from [slide-html](https://github.com/trikita/slide-html) are included per default, so you can print a summary of your presentation.
+
+with the `-pdf` flag, the styles are changed for printing the full slides, or to export to a pdf.
+
+if something wont fit with your presentation styles, you can overwrite the print styles:
+
+```css
+@media print {
+  @page {size: landscape}
+
+  /* ... */
+
+  .slide h1 {
+		font-size: 8rem !important;
+	}
+	.slide p {
+		font-size: 2rem !important;
+	}
+
+}
+```
+
 ## cli flags
 
 -dev  
@@ -182,3 +206,6 @@ body {
 
 -title 
 * html title in the browser (default "Slide")
+
+-pdf 
+* overwrite the summary print styles with full slide prints (default false)
