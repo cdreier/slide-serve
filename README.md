@@ -2,23 +2,29 @@
 
 i really like the idea behind [slide-html](https://github.com/trikita/slide-html) and the [Takahashi method](https://en.wikipedia.org/wiki/Takahashi_method)
 
-for really, really fast slide-development i created this small server
+you only need to learn 5 pseudo-markdown rules and a few annotations to build a nice presentation.
+
+for really, really fast slide-creation and iteration and a good *developer*-experience i created this server
+
+for a tutorial and demo, download the latest binary for your platform from the [release page](https://github.com/cdreier/slide-serve/releases/latest), start it without any flag, and visit your browser at [http://127.0.0.1:8080](http://127.0.0.1:8080)
 
 ## features
 
 * just write plaintext files, no need to think about html or indents
-  * you can even write more than one plaintext file!
-* auto reload the browser on that slide you just edited
+  * you can even write more than one plaintext file, they are added in alphanumerical order
+* start with the `-dev` flag to auto reload the browser on that slide you just edited
   * this is just awesome!
 * add styles and background images next to your content
   * no hardcoded slide-numbers in css
   * don't count your slides, i'll do it for you ;)
 * syntax highlighter with [chroma](https://github.com/alecthomas/chroma)
 * use local images
+* add small javascripts for the last bits of awesomeness
+  * take a look at [useful snippets](#useful-snippets) for an example
 
 ## usage
 
-quickstart with a pre-build binary for linux, windows or mac: on the [release page](https://github.com/cdreier/slide-serve/releases)
+start with a pre-build binary for linux, windows or mac: on the [release page](https://github.com/cdreier/slide-serve/releases/latest)
 
 put the file in a place you really like - and start it!  
 the `-dir` flag should point to the folder with your presentation
@@ -27,10 +33,12 @@ the `-dir` flag should point to the folder with your presentation
 ./slide-serve -dir how-to-overengineer-3000
 ```
 
+starting without flags, starts the demo presentation
+
 ### your presentation
 
-* your slide-files should end with `.md` 
-* `styles.css` is automaticly added to your presentation
+* your slide-files must end with `.md` to gets loaded
+* `styles.css` in your presentation-root dir is automaticly added to your presentation
 * your presentation directory is routed to `http://localhost:8080/static/` so you can access local images or fonts - this is important for your custom stylesheets!
 
 ### syntax additions
