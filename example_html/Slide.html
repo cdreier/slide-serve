@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<!-- saved from url=(0024)http://localhost:8080/#1 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Slide</title>
+    <style>*{margin:0;padding:0;box-sizing:border-box}#slide{display:none}.slide{white-space:nowrap}.slide-content{align-self:center}@media screen{body{position:absolute;top:50%;left:50%}.slide-4x3{width:1024px;height:768px;margin:-384px 0 0 -512px}.slide-16x9{width:1024px;height:576px;margin:-288px 0 0 -512px}.slide-16x10{width:1024px;height:640px;margin:-320px 0 0 -512px}.slide{position:absolute;width:100%;height:100%;display:flex;justify-content:center;overflow:hidden}}</style>
+    <style>@media print {
+	body { transform: none !important; }
+	h1 { font-size: 1.8rem; line-height: 1.5;  letter-spacing: -.05rem; font-weight: 300; }
+	.slide-root { width: 100%; display: flex; flex-wrap: wrap; align-items: stretch; }
+	.slide-content { transform: none !important; }
+	.slide {
+		display: flex;
+		justify-content: center;
+		flex: 1;
+		padding: 0.5rem;
+		margin: 0.5rem 0.5rem 4rem 0.5rem;
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		visibility: visible !important;
+	}
+}</style>
+    <style>@import url(https://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext);
+@import url(https://fonts.googleapis.com/css?family=Oswald:400,700);
+@import url(https://fonts.googleapis.com/css?family=Inconsolata);
+/* Customize theme: change body, h1, strong, pre or .slide class */
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #edd400;
+  color: #453029;
+  line-height: 1.54;
+}
+.slide h1 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+  font-size: 2.6rem;
+}
+.slide pre {
+  font-family: 'Inconsolata';
+  font-size: 0.6rem;
+  line-height: 1.1;
+  padding: 3px;
+}
+.slide-10 h1 { color: #fff; text-shadow: 1px 1px 3px #453029; }
+.slide-11 {
+  background: url("http://trikita.co/slide/icon.png"), url("http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/asanoha-400px.png");
+  background-repeat: no-repeat, repeat;
+  background-size: 35%, auto;
+  background-position: bottom right;
+}
+.slide-20 {
+background: url("/static//example_bg.jpg");
+background-repeat: no-repeat;
+background-size: contain;
+background-position: center;
+}
+
+.slide-20 h1 { 
+  color: #fff; 
+  text-shadow: 1px 1px 3px #333; 
+}
+.slide-25 .slide-content {
+  background-image: url("http://trikita.co/slide/write_framed.png"),
+    url("http://trikita.co/slide/styles.gif"),
+    url("http://trikita.co/slide/illustrate_framed.png");
+  background-repeat: no-repeat;
+  background-size: 40%, 40%, 40%;
+  background-position: bottom left, bottom center, bottom right;
+}</style>
+    <script>
+      function resize() {
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        var bw = document.body.offsetWidth;
+        var bh = document.body.offsetHeight;
+        var scale = ((w/h < bw/bh) ? w/bw : h/bh);
+        document.body.style.transform = 'scale(' + scale + ')';
+      }
+
+      var currentSlide = -1;
+
+      function goTo(slideIndex) {
+        currentSlide = slideIndex;
+        window.location.hash = slideIndex;
+        var slides = document.querySelectorAll('.slide');
+        for (var i = 0; i < slides.length; i++) {
+          var el = slides[i];
+          var slide = el.children[0];
+          var scaleWidth = (el.offsetWidth * 0.8 / slide.offsetWidth);
+          var scaleHeight = (el.offsetHeight * 0.8 / slide.offsetHeight);
+          slide.style.transform = 'scale(' + Math.min(scaleWidth, scaleHeight) + ')';
+          if (i == currentSlide) {
+            el.style.visibility = '';
+          } else {
+            el.style.visibility = 'hidden';
+          }
+        }
+
+        var evt = new Event("slideEnter_"+slideIndex)
+        window.dispatchEvent(evt)
+      }
+
+      function next() {
+        goTo(Math.min(currentSlide + 1, document.querySelectorAll('.slide').length - 1));
+      }
+
+      function prev() {
+        goTo(Math.max(currentSlide - 1, 0));
+      }
+
+      window.onload = function() {
+        resize();
+        var tmpSlideFromHash = parseInt(window.location.hash.substring(1)||0, 10)
+        goTo(tmpSlideFromHash);
+        window.onclick = next;
+        window.onresize = resize;
+        window.onkeydown = function(e) {
+          if (e.keyCode == 39) {
+            next();
+          } else if (e.keyCode == 37) {
+            prev();
+          }
+        };
+      };
+    </script>
+  </head>
+  <body class="slide-16x9" style="transform: scale(1.17188);">
+    <div class="slide-root">
+      
+		<div class="slide slide-0" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(2.88);">
+	
+		<h1>SLIDE</h1>
+	
+				<p>Good speech deserves time it takes</p>
+			
+				<p>Save time for speech</p>
+			
+				<p>Leave presentation to <strong>Slide</strong></p>
+			
+				<p>and <strong>slide-serve</strong> :)</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-1" style="">
+		<div class="slide-content" style="transform: scale(3.2252);">
+	
+		<h1>Focus on content</h1>
+	
+				<p>Learn 5 markup rules</p>
+			
+				<p>to make content look great</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-2" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(4.81882);">
+	
+		<h1> #1</h1>
+	
+				<p>Each paragraph is a slide</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-3" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(5.23636);">
+	
+		<h1> #2</h1>
+	
+				<p>Headers start with #</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-4" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(3.47119);">
+	
+		<h1> #3</h1>
+	
+				<p>Emphasize <strong>words</strong></p>
+			
+				<p>surrounding them with *asterisks*</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-5" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(2.80976);">
+	
+		<h1> #4</h1>
+	
+				<p>Indent code with 2 spaces</p>
+			<pre class="chroma"><span class="cm">/* Day of week: Sakamoto's algorithm */</span>
+<span class="kr">int</span> <span class="nx">dow</span><span class="p">(</span><span class="kr">int</span> <span class="nx">y</span><span class="p">,</span> <span class="kr">int</span> <span class="nx">m</span><span class="p">,</span> <span class="kr">int</span> <span class="nx">d</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kr">static</span> <span class="kr">int</span> <span class="nx">t</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span>
+  <span class="nx">y</span> <span class="o">-=</span> <span class="nx">m</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="k">return</span> <span class="p">(</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">y</span><span class="err">/4 - y/100 + y/400 + t[m-1] + d) % 7;</span>
+<span class="p">}</span>
+</pre>
+			<style>/* Background */ .chroma { color: #f8f8f2; background-color: #272822 }
+/* Error */ .chroma .err { color: #960050; background-color: #1e0010 }
+/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: 100%; overflow: auto; display: block; }
+/* LineHighlight */ .chroma .hl { display: block; width: 100%; }
+/* LineNumbersTable */ .chroma .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; display: block; }
+/* LineNumbers */ .chroma .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+/* Keyword */ .chroma .k { color: #66d9ef }
+/* KeywordConstant */ .chroma .kc { color: #66d9ef }
+/* KeywordDeclaration */ .chroma .kd { color: #66d9ef }
+/* KeywordNamespace */ .chroma .kn { color: #f92672 }
+/* KeywordPseudo */ .chroma .kp { color: #66d9ef }
+/* KeywordReserved */ .chroma .kr { color: #66d9ef }
+/* KeywordType */ .chroma .kt { color: #66d9ef }
+/* NameAttribute */ .chroma .na { color: #a6e22e }
+/* NameClass */ .chroma .nc { color: #a6e22e }
+/* NameConstant */ .chroma .no { color: #66d9ef }
+/* NameDecorator */ .chroma .nd { color: #a6e22e }
+/* NameException */ .chroma .ne { color: #a6e22e }
+/* NameFunction */ .chroma .nf { color: #a6e22e }
+/* NameOther */ .chroma .nx { color: #a6e22e }
+/* NameTag */ .chroma .nt { color: #f92672 }
+/* Literal */ .chroma .l { color: #ae81ff }
+/* LiteralDate */ .chroma .ld { color: #e6db74 }
+/* LiteralString */ .chroma .s { color: #e6db74 }
+/* LiteralStringAffix */ .chroma .sa { color: #e6db74 }
+/* LiteralStringBacktick */ .chroma .sb { color: #e6db74 }
+/* LiteralStringChar */ .chroma .sc { color: #e6db74 }
+/* LiteralStringDelimiter */ .chroma .dl { color: #e6db74 }
+/* LiteralStringDoc */ .chroma .sd { color: #e6db74 }
+/* LiteralStringDouble */ .chroma .s2 { color: #e6db74 }
+/* LiteralStringEscape */ .chroma .se { color: #ae81ff }
+/* LiteralStringHeredoc */ .chroma .sh { color: #e6db74 }
+/* LiteralStringInterpol */ .chroma .si { color: #e6db74 }
+/* LiteralStringOther */ .chroma .sx { color: #e6db74 }
+/* LiteralStringRegex */ .chroma .sr { color: #e6db74 }
+/* LiteralStringSingle */ .chroma .s1 { color: #e6db74 }
+/* LiteralStringSymbol */ .chroma .ss { color: #e6db74 }
+/* LiteralNumber */ .chroma .m { color: #ae81ff }
+/* LiteralNumberBin */ .chroma .mb { color: #ae81ff }
+/* LiteralNumberFloat */ .chroma .mf { color: #ae81ff }
+/* LiteralNumberHex */ .chroma .mh { color: #ae81ff }
+/* LiteralNumberInteger */ .chroma .mi { color: #ae81ff }
+/* LiteralNumberIntegerLong */ .chroma .il { color: #ae81ff }
+/* LiteralNumberOct */ .chroma .mo { color: #ae81ff }
+/* Operator */ .chroma .o { color: #f92672 }
+/* OperatorWord */ .chroma .ow { color: #f92672 }
+/* Comment */ .chroma .c { color: #75715e }
+/* CommentHashbang */ .chroma .ch { color: #75715e }
+/* CommentMultiline */ .chroma .cm { color: #75715e }
+/* CommentSingle */ .chroma .c1 { color: #75715e }
+/* CommentSpecial */ .chroma .cs { color: #75715e }
+/* CommentPreproc */ .chroma .cp { color: #75715e }
+/* CommentPreprocFile */ .chroma .cpf { color: #75715e }
+/* GenericDeleted */ .chroma .gd { color: #f92672 }
+/* GenericEmph */ .chroma .ge { font-style: italic }
+/* GenericInserted */ .chroma .gi { color: #a6e22e }
+/* GenericStrong */ .chroma .gs { font-weight: bold }
+/* GenericSubheading */ .chroma .gu { color: #75715e }
+</style>
+		
+		</div>
+		</div>
+	
+		<div class="slide slide-6" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(3.38824);">
+	
+		<h1> #5</h1>
+	
+				<p>Lines starting with a dot</p>
+			
+				<p>disable markup such as</p>
+			
+				<p>headlines, code or blank lines</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-7" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(3.84);">
+	
+				<p>↵  = new slide</p>
+			
+				<p># = headline</p>
+			
+				<p><strong></strong> = emphasize</p>
+			
+				<p>␣␣ = monospace</p>
+			
+				<p>. = escape</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-8" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(3.2768);">
+	
+		<h1> Styling with CSS</h1>
+	
+		</div>
+		</div>
+	
+		<div class="slide slide-9" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(2.50435);">
+	
+		<h1> Selectors</h1>
+	
+				<p>.slide</p>
+			
+				<p>.slide h1</p>
+			
+				<p>.slide strong</p>
+			
+				<p>.slide pre</p>
+			
+				<p></p>
+			
+				<p>.slide-N, where N is slide number</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-10" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(4.18909);">
+	
+		<h1> Example</h1>
+	
+				<p></p>
+			<pre class="chroma"><span class="p">.</span><span class="nc">slide-10</span> <span class="nt">h1</span> <span class="p">{</span>
+  <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">text-shadow</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="mi">1</span><span class="kt">px</span> <span class="mi">3</span><span class="kt">px</span> <span class="mh">#453029</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+				<p></p>
+			
+			<style>/* Background */ .chroma { color: #f8f8f2; background-color: #272822 }
+/* Error */ .chroma .err { color: #960050; background-color: #1e0010 }
+/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: 100%; overflow: auto; display: block; }
+/* LineHighlight */ .chroma .hl { display: block; width: 100%; }
+/* LineNumbersTable */ .chroma .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; display: block; }
+/* LineNumbers */ .chroma .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+/* Keyword */ .chroma .k { color: #66d9ef }
+/* KeywordConstant */ .chroma .kc { color: #66d9ef }
+/* KeywordDeclaration */ .chroma .kd { color: #66d9ef }
+/* KeywordNamespace */ .chroma .kn { color: #f92672 }
+/* KeywordPseudo */ .chroma .kp { color: #66d9ef }
+/* KeywordReserved */ .chroma .kr { color: #66d9ef }
+/* KeywordType */ .chroma .kt { color: #66d9ef }
+/* NameAttribute */ .chroma .na { color: #a6e22e }
+/* NameClass */ .chroma .nc { color: #a6e22e }
+/* NameConstant */ .chroma .no { color: #66d9ef }
+/* NameDecorator */ .chroma .nd { color: #a6e22e }
+/* NameException */ .chroma .ne { color: #a6e22e }
+/* NameFunction */ .chroma .nf { color: #a6e22e }
+/* NameOther */ .chroma .nx { color: #a6e22e }
+/* NameTag */ .chroma .nt { color: #f92672 }
+/* Literal */ .chroma .l { color: #ae81ff }
+/* LiteralDate */ .chroma .ld { color: #e6db74 }
+/* LiteralString */ .chroma .s { color: #e6db74 }
+/* LiteralStringAffix */ .chroma .sa { color: #e6db74 }
+/* LiteralStringBacktick */ .chroma .sb { color: #e6db74 }
+/* LiteralStringChar */ .chroma .sc { color: #e6db74 }
+/* LiteralStringDelimiter */ .chroma .dl { color: #e6db74 }
+/* LiteralStringDoc */ .chroma .sd { color: #e6db74 }
+/* LiteralStringDouble */ .chroma .s2 { color: #e6db74 }
+/* LiteralStringEscape */ .chroma .se { color: #ae81ff }
+/* LiteralStringHeredoc */ .chroma .sh { color: #e6db74 }
+/* LiteralStringInterpol */ .chroma .si { color: #e6db74 }
+/* LiteralStringOther */ .chroma .sx { color: #e6db74 }
+/* LiteralStringRegex */ .chroma .sr { color: #e6db74 }
+/* LiteralStringSingle */ .chroma .s1 { color: #e6db74 }
+/* LiteralStringSymbol */ .chroma .ss { color: #e6db74 }
+/* LiteralNumber */ .chroma .m { color: #ae81ff }
+/* LiteralNumberBin */ .chroma .mb { color: #ae81ff }
+/* LiteralNumberFloat */ .chroma .mf { color: #ae81ff }
+/* LiteralNumberHex */ .chroma .mh { color: #ae81ff }
+/* LiteralNumberInteger */ .chroma .mi { color: #ae81ff }
+/* LiteralNumberIntegerLong */ .chroma .il { color: #ae81ff }
+/* LiteralNumberOct */ .chroma .mo { color: #ae81ff }
+/* Operator */ .chroma .o { color: #f92672 }
+/* OperatorWord */ .chroma .ow { color: #f92672 }
+/* Comment */ .chroma .c { color: #75715e }
+/* CommentHashbang */ .chroma .ch { color: #75715e }
+/* CommentMultiline */ .chroma .cm { color: #75715e }
+/* CommentSingle */ .chroma .c1 { color: #75715e }
+/* CommentSpecial */ .chroma .cs { color: #75715e }
+/* CommentPreproc */ .chroma .cp { color: #75715e }
+/* CommentPreprocFile */ .chroma .cpf { color: #75715e }
+/* GenericDeleted */ .chroma .gd { color: #f92672 }
+/* GenericEmph */ .chroma .ge { font-style: italic }
+/* GenericInserted */ .chroma .gi { color: #a6e22e }
+/* GenericStrong */ .chroma .gs { font-weight: bold }
+/* GenericSubheading */ .chroma .gu { color: #75715e }
+</style>
+		
+		</div>
+		</div>
+	
+		<div class="slide slide-11" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(3.12672);">
+	
+		<h1> CSS backgrounds</h1>
+	<pre class="chroma"><span class="p">.</span><span class="nc">slide-12</span> <span class="p">{</span>
+  <span class="k">background</span><span class="p">:</span> <span class="nb">url</span><span class="p">(</span><span class="s2">"icon.png"</span><span class="p">),</span>
+              <span class="nb">url</span><span class="p">(</span><span class="s2">"bg.png"</span><span class="p">);</span>
+  <span class="k">background-repeat</span><span class="p">:</span> <span class="kc">no-repeat</span><span class="p">,</span> <span class="kc">repeat</span><span class="p">;</span>
+  <span class="k">background-size</span><span class="p">:</span> <span class="mi">40</span><span class="kt">%</span><span class="p">,</span> <span class="kc">auto</span><span class="p">;</span>
+  <span class="k">background-position</span><span class="p">:</span> <span class="kc">bottom</span> <span class="kc">right</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+			<style>/* Background */ .chroma { color: #f8f8f2; background-color: #272822 }
+/* Error */ .chroma .err { color: #960050; background-color: #1e0010 }
+/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: 100%; overflow: auto; display: block; }
+/* LineHighlight */ .chroma .hl { display: block; width: 100%; }
+/* LineNumbersTable */ .chroma .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; display: block; }
+/* LineNumbers */ .chroma .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+/* Keyword */ .chroma .k { color: #66d9ef }
+/* KeywordConstant */ .chroma .kc { color: #66d9ef }
+/* KeywordDeclaration */ .chroma .kd { color: #66d9ef }
+/* KeywordNamespace */ .chroma .kn { color: #f92672 }
+/* KeywordPseudo */ .chroma .kp { color: #66d9ef }
+/* KeywordReserved */ .chroma .kr { color: #66d9ef }
+/* KeywordType */ .chroma .kt { color: #66d9ef }
+/* NameAttribute */ .chroma .na { color: #a6e22e }
+/* NameClass */ .chroma .nc { color: #a6e22e }
+/* NameConstant */ .chroma .no { color: #66d9ef }
+/* NameDecorator */ .chroma .nd { color: #a6e22e }
+/* NameException */ .chroma .ne { color: #a6e22e }
+/* NameFunction */ .chroma .nf { color: #a6e22e }
+/* NameOther */ .chroma .nx { color: #a6e22e }
+/* NameTag */ .chroma .nt { color: #f92672 }
+/* Literal */ .chroma .l { color: #ae81ff }
+/* LiteralDate */ .chroma .ld { color: #e6db74 }
+/* LiteralString */ .chroma .s { color: #e6db74 }
+/* LiteralStringAffix */ .chroma .sa { color: #e6db74 }
+/* LiteralStringBacktick */ .chroma .sb { color: #e6db74 }
+/* LiteralStringChar */ .chroma .sc { color: #e6db74 }
+/* LiteralStringDelimiter */ .chroma .dl { color: #e6db74 }
+/* LiteralStringDoc */ .chroma .sd { color: #e6db74 }
+/* LiteralStringDouble */ .chroma .s2 { color: #e6db74 }
+/* LiteralStringEscape */ .chroma .se { color: #ae81ff }
+/* LiteralStringHeredoc */ .chroma .sh { color: #e6db74 }
+/* LiteralStringInterpol */ .chroma .si { color: #e6db74 }
+/* LiteralStringOther */ .chroma .sx { color: #e6db74 }
+/* LiteralStringRegex */ .chroma .sr { color: #e6db74 }
+/* LiteralStringSingle */ .chroma .s1 { color: #e6db74 }
+/* LiteralStringSymbol */ .chroma .ss { color: #e6db74 }
+/* LiteralNumber */ .chroma .m { color: #ae81ff }
+/* LiteralNumberBin */ .chroma .mb { color: #ae81ff }
+/* LiteralNumberFloat */ .chroma .mf { color: #ae81ff }
+/* LiteralNumberHex */ .chroma .mh { color: #ae81ff }
+/* LiteralNumberInteger */ .chroma .mi { color: #ae81ff }
+/* LiteralNumberIntegerLong */ .chroma .il { color: #ae81ff }
+/* LiteralNumberOct */ .chroma .mo { color: #ae81ff }
+/* Operator */ .chroma .o { color: #f92672 }
+/* OperatorWord */ .chroma .ow { color: #f92672 }
+/* Comment */ .chroma .c { color: #75715e }
+/* CommentHashbang */ .chroma .ch { color: #75715e }
+/* CommentMultiline */ .chroma .cm { color: #75715e }
+/* CommentSingle */ .chroma .c1 { color: #75715e }
+/* CommentSpecial */ .chroma .cs { color: #75715e }
+/* CommentPreproc */ .chroma .cp { color: #75715e }
+/* CommentPreprocFile */ .chroma .cpf { color: #75715e }
+/* GenericDeleted */ .chroma .gd { color: #f92672 }
+/* GenericEmph */ .chroma .ge { font-style: italic }
+/* GenericInserted */ .chroma .gi { color: #a6e22e }
+/* GenericStrong */ .chroma .gs { font-weight: bold }
+/* GenericSubheading */ .chroma .gu { color: #75715e }
+</style>
+		
+		</div>
+		</div>
+	
+		<div class="slide slide-12" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(5.46133);">
+	
+		<h1> But wait...</h1>
+	
+		</div>
+		</div>
+	
+		<div class="slide slide-13" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(3.25079);">
+	
+		<h1> if i add a slide...</h1>
+	
+				<p>at the beginning of my presentation?</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-14" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(3.72364);">
+	
+				<p>just go through all your styles</p>
+			
+				<p>and images</p>
+			
+				<p>and change your slide numbers?</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-15" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(3.53103);">
+	
+		<h1> I got your back!</h1>
+	
+		</div>
+		</div>
+	
+		<div class="slide slide-16" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(2.78639);">
+	
+		<h1> Styles in you slide...</h1>
+	
+				<p>  @css/customstyle.css</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-17" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(2.1672);">
+	
+		<h1> ...and background images</h1>
+	
+				<p> @img/example_bg.jpg</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-18" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(2.5441);">
+	
+		<h1> CSS added dynamicly</h1>
+	
+				<p>with the correct slide numbers</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-19" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(2.94676);">
+	
+				<p>just use 'SLIDENUMBER' as placeholder</p>
+			<pre class="chroma"><span class="p">.</span><span class="nc">slide-SLIDENUMBER</span> <span class="p">.</span><span class="nc">slide-content</span> <span class="p">{</span>
+<span class="p">}</span>
+</pre>
+			<style>/* Background */ .chroma { color: #f8f8f2; background-color: #272822 }
+/* Error */ .chroma .err { color: #960050; background-color: #1e0010 }
+/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: 100%; overflow: auto; display: block; }
+/* LineHighlight */ .chroma .hl { display: block; width: 100%; }
+/* LineNumbersTable */ .chroma .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; display: block; }
+/* LineNumbers */ .chroma .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+/* Keyword */ .chroma .k { color: #66d9ef }
+/* KeywordConstant */ .chroma .kc { color: #66d9ef }
+/* KeywordDeclaration */ .chroma .kd { color: #66d9ef }
+/* KeywordNamespace */ .chroma .kn { color: #f92672 }
+/* KeywordPseudo */ .chroma .kp { color: #66d9ef }
+/* KeywordReserved */ .chroma .kr { color: #66d9ef }
+/* KeywordType */ .chroma .kt { color: #66d9ef }
+/* NameAttribute */ .chroma .na { color: #a6e22e }
+/* NameClass */ .chroma .nc { color: #a6e22e }
+/* NameConstant */ .chroma .no { color: #66d9ef }
+/* NameDecorator */ .chroma .nd { color: #a6e22e }
+/* NameException */ .chroma .ne { color: #a6e22e }
+/* NameFunction */ .chroma .nf { color: #a6e22e }
+/* NameOther */ .chroma .nx { color: #a6e22e }
+/* NameTag */ .chroma .nt { color: #f92672 }
+/* Literal */ .chroma .l { color: #ae81ff }
+/* LiteralDate */ .chroma .ld { color: #e6db74 }
+/* LiteralString */ .chroma .s { color: #e6db74 }
+/* LiteralStringAffix */ .chroma .sa { color: #e6db74 }
+/* LiteralStringBacktick */ .chroma .sb { color: #e6db74 }
+/* LiteralStringChar */ .chroma .sc { color: #e6db74 }
+/* LiteralStringDelimiter */ .chroma .dl { color: #e6db74 }
+/* LiteralStringDoc */ .chroma .sd { color: #e6db74 }
+/* LiteralStringDouble */ .chroma .s2 { color: #e6db74 }
+/* LiteralStringEscape */ .chroma .se { color: #ae81ff }
+/* LiteralStringHeredoc */ .chroma .sh { color: #e6db74 }
+/* LiteralStringInterpol */ .chroma .si { color: #e6db74 }
+/* LiteralStringOther */ .chroma .sx { color: #e6db74 }
+/* LiteralStringRegex */ .chroma .sr { color: #e6db74 }
+/* LiteralStringSingle */ .chroma .s1 { color: #e6db74 }
+/* LiteralStringSymbol */ .chroma .ss { color: #e6db74 }
+/* LiteralNumber */ .chroma .m { color: #ae81ff }
+/* LiteralNumberBin */ .chroma .mb { color: #ae81ff }
+/* LiteralNumberFloat */ .chroma .mf { color: #ae81ff }
+/* LiteralNumberHex */ .chroma .mh { color: #ae81ff }
+/* LiteralNumberInteger */ .chroma .mi { color: #ae81ff }
+/* LiteralNumberIntegerLong */ .chroma .il { color: #ae81ff }
+/* LiteralNumberOct */ .chroma .mo { color: #ae81ff }
+/* Operator */ .chroma .o { color: #f92672 }
+/* OperatorWord */ .chroma .ow { color: #f92672 }
+/* Comment */ .chroma .c { color: #75715e }
+/* CommentHashbang */ .chroma .ch { color: #75715e }
+/* CommentMultiline */ .chroma .cm { color: #75715e }
+/* CommentSingle */ .chroma .c1 { color: #75715e }
+/* CommentSpecial */ .chroma .cs { color: #75715e }
+/* CommentPreproc */ .chroma .cp { color: #75715e }
+/* CommentPreprocFile */ .chroma .cpf { color: #75715e }
+/* GenericDeleted */ .chroma .gd { color: #f92672 }
+/* GenericEmph */ .chroma .ge { font-style: italic }
+/* GenericInserted */ .chroma .gi { color: #a6e22e }
+/* GenericStrong */ .chroma .gs { font-weight: bold }
+/* GenericSubheading */ .chroma .gu { color: #75715e }
+</style>
+		
+		</div>
+		</div>
+	
+		<div class="slide slide-20" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(5.31948);">
+	
+		<h1> AWESOME</h1>
+	
+				<p></p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-21" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(5.25128);">
+	
+		<h1> javascript!</h1>
+	
+			<script>
+				window.addEventListener('slideEnter_21', function(){
+					var _slideIndex = 21;
+					var _slide = document.querySelectorAll(".slide-" + _slideIndex);
+					_slide = _slide[0];
+					// var _slide = document.getElementById("")
+					_slide.style.backgroundColor = "red"
+					setTimeout(() => {
+						_slide.style.backgroundColor = "blue"
+						setTimeout(() => {
+							_slide.style.backgroundColor = "inherit"
+						}, 1000)
+					}, 1000)
+				})
+			</script>
+		
+		</div>
+		</div>
+	
+		<div class="slide slide-22" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(2.69474);">
+	
+		<h1> syntax highlightning</h1>
+	
+				<p>just tell me what language</p>
+			
+				<p>with @code/javascript</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-23" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(4.4043);">
+	
+		<h1> Dev server</h1>
+	
+				<p>with auto-browser-reload!</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-24" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(3.93846);">
+	
+		<h1> Print mode</h1>
+	
+				<p>You can print slide thumbnails</p>
+			
+				<p>to practice your speech</p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-25" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(3.25079);">
+	
+		<h1> Slide for Android</h1>
+	
+				<p></p>
+			
+				<p></p>
+			
+				<p></p>
+			
+		</div>
+		</div>
+	
+		<div class="slide slide-26" style="visibility: hidden;">
+		<div class="slide-content" style="transform: scale(2.048);">
+	
+		<h1> Links</h1>
+	
+				<p>http://trikita.co/slide</p>
+			
+				<p>https://github.com/trikita/slide</p>
+			
+				<p>https://github.com/trikita/slide-html</p>
+			
+				<p>https://play.google.com/store/apps/details?id=trikita.slide</p>
+			
+				<p>https://github.com/cdreier/slide-serve</p>
+			
+		</div>
+		</div>
+	
+    </div>
+    <div>
+        
+    </div>
+  
+</body></html>

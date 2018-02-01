@@ -1,0 +1,32 @@
+@font-face { 
+  font-family: 'Lintel';
+  src: url(/static/fonts/Lintel_Reg-webfont.ttf) format('truetype'); 
+}
+@font-face { 
+  font-family: 'Iosevka';
+  src: url(/static/fonts/iosevka-regular.ttf) format('truetype'); 
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #EFEFEF;
+  color: #222;
+}
+p {
+  text-align: center;
+}
+.slide {
+  background-size: unset !important;
+}
+.slide h1 {
+  text-align: center;
+  font-family: Lintel;
+  font-weight: 400;
+  font-size: 2.6rem;
+}
+.slide pre {
+  font-family: Iosevka;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 3px;
+}

@@ -17,6 +17,7 @@ body {
   font-family: 'Inconsolata';
   font-size: 0.6rem;
   line-height: 1.1;
+  padding: 3px;
 }
 .slide-10 h1 { color: #fff; text-shadow: 1px 1px 3px #453029; }
 .slide-11 {
