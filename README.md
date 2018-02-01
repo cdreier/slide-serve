@@ -10,9 +10,14 @@ please take a look at the [extended example presentation](http://htmlpreview.git
 
 ## quickstart
 
+i added a [quickstart package](https://github.com/cdreier/slide-serve/tree/master/quickstart) in the repository, with my own styles and short demos from all features
 
+just download the latest binary for your platform from the [release page](https://github.com/cdreier/slide-serve/releases/latest), place it somewhere and start
 
-download the latest binary for your platform from the [release page](https://github.com/cdreier/slide-serve/releases/latest), start it without any flag, and visit your browser at [http://127.0.0.1:8080](http://127.0.0.1:8080)
+```
+./slide-serve -dir path/to/quickstart
+```
+and visit [http://127.0.0.1:8080](http://127.0.0.1:8080)
 
 ## features
 
@@ -28,26 +33,13 @@ download the latest binary for your platform from the [release page](https://git
 * add small javascripts for the last bits of awesomeness
   * take a look at [useful snippets](#useful-snippets) for an example
 
-## usage
-
-start with a pre-build binary for linux, windows or mac: on the [release page](https://github.com/cdreier/slide-serve/releases/latest)
-
-put the file in a place you really like - and start it!  
-the `-dir` flag should point to the folder with your presentation
-
-``` bash
-./slide-serve -dir how-to-overengineer-3000
-```
-
-starting without flags, starts the demo presentation
-
-### your presentation
+## your presentation
 
 * your slide-files must end with `.md` to gets loaded
 * `styles.css` in your presentation-root dir is automaticly added to your presentation
 * your presentation directory is routed to `http://localhost:8080/static/` so you can access local images or fonts - this is important for your custom stylesheets!
 
-### syntax additions
+## syntax additions
 
 `@img/imagename.gif`  
 `@css/stylesheet.css`  
@@ -101,7 +93,7 @@ example presentation: https://github.com/cdreier/slide-serve/tree/master/example
 > to see the example presentation, just run slide-serve without any flags
 
 
-### syntax highlighter
+## syntax highlighter
 
 i used [chroma](https://github.com/alecthomas/chroma) for syntax highlightning. 
 
@@ -123,15 +115,15 @@ example (the position of the `@code` annotation does not matter)
   }
 ```
 
-### build your own
+## build your own
 
 i used [packr](https://github.com/gobuffalo/packr) to embedd the html template in the binary
 
 all the rest is basic go code, with dependencies managed by [dep](https://github.com/golang/dep)
 
-## useful snippets
+# useful snippets
 
-### restarting gifs
+## restarting gifs
 
 as gifs are looping in the background, this script reloads the gif every time you enter the slide
 
@@ -154,7 +146,7 @@ and in an example slide
 @js/restartGif.js
 ```
 
-### no image scaling
+## no image scaling
 
 in the past, i needed a down-scaling of the images - if you want to reset this behaviour, add this to your `styles.css`
 
@@ -164,7 +156,7 @@ in the past, i needed a down-scaling of the images - if you want to reset this b
 }
 ```
 
-### add a logo on every slide
+## add a logo on every slide
 
 you can add more background images - so we add one default image in the `styles.css`
 
@@ -179,7 +171,7 @@ body {
 }
 ```
 
-## printing
+# printing
 
 the default print styles from [slide-html](https://github.com/trikita/slide-html) are included per default, so you can print a summary of your presentation.
 
@@ -203,7 +195,7 @@ if something wont fit with your presentation styles, you can overwrite the print
 }
 ```
 
-## cli flags
+# cli flags
 
 -dev  
 * start with `-dev` or `-dev true` to enable auto-reloading (default false)
