@@ -6,7 +6,13 @@ you only need to learn 5 pseudo-markdown rules and a few annotations to build a 
 
 for really, really fast slide-creation and iteration and a good *developer*-experience i created this server
 
-for a tutorial and demo, download the latest binary for your platform from the [release page](https://github.com/cdreier/slide-serve/releases/latest), start it without any flag, and visit your browser at [http://127.0.0.1:8080](http://127.0.0.1:8080)
+please take a look at the [extended example presentation](http://htmlpreview.github.io/?https://github.com/cdreier/slide-serve/blob/master/example_html/Slide.html) from slide-html
+
+## quickstart
+
+
+
+download the latest binary for your platform from the [release page](https://github.com/cdreier/slide-serve/releases/latest), start it without any flag, and visit your browser at [http://127.0.0.1:8080](http://127.0.0.1:8080)
 
 ## features
 
