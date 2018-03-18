@@ -30,8 +30,10 @@ func renderSlide(s slide, index int, codeTheme string) string {
 			code += line + "\n"
 			slideMarkup += codeMarker
 		} else if strings.HasPrefix(line, "#") {
-			line = strings.TrimPrefix(line, "#")
-			line = headline(line)
+			var headlinetype int
+			headlinetype = strings.Index(line, " ")
+			line = strings.TrimLeft(line, "#")
+			line = headline(line, headlinetype)
 			slideMarkup += line
 		} else {
 			if strings.HasPrefix(line, ".") {
@@ -87,10 +89,10 @@ func renderSlide(s slide, index int, codeTheme string) string {
 	return slideMarkup
 }
 
-func headline(txt string) string {
+func headline(txt string, headlinetype int) string {
 	return fmt.Sprintf(`
-		<h1>%s</h1>
-	`, txt)
+		<h%d>%s</h%d>
+	`, headlinetype, txt, headlinetype)
 }
 
 func startSlide(index int) string {

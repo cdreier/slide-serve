@@ -6,7 +6,13 @@ to make content look great
 Each paragraph is a slide
 
 # #2
-Headers start with #
+Headlines are equal to markdown syntax
+# headline 1
+## headline 2
+### headline 3
+#### headline 4
+##### headline 5
+###### headline 6
 
 # #3
 Emphasize *words*
