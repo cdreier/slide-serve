@@ -18,6 +18,7 @@ type slide struct {
 	code       string
 	image      string
 	styles     string
+	classes		 string
 	javascript string
 	hash       string
 }
@@ -127,6 +128,8 @@ func (h *holder) generateSlides(content string) {
 
 			} else if strings.HasPrefix(tmp, "@code/") {
 				s.code = strings.Replace(tmp, "@code/", "", -1)
+			} else if strings.HasPrefix(tmp, "@classes/") {
+				s.classes = strings.Replace(tmp, "@classes/", "", -1)
 			} else {
 				s.content += tmp + "\n"
 			}
