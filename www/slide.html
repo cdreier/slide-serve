@@ -36,6 +36,8 @@
           }
         }
 
+        document.getElementsByTagName("body")[0].className = "slide-{{.SlideRatio}}";
+
         var leaveEvt = new Event("slideLeave_"+slideIndex-1)
         window.dispatchEvent(leaveEvt)
 
