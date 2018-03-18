@@ -73,6 +73,20 @@ func renderSlide(s slide, index int, codeTheme string) string {
 		`, cssClasses)
 	}
 
+	if s.classes != "" {
+		var classes string
+		classes = strings.Replace(s.classes, ",", " ", -1)
+		slideMarkup += fmt.Sprintf(`
+			<script>
+				window.addEventListener('slideEnter_%d', function(){
+					var bodyClasses = document.getElementsByTagName("body")[0].className
+					bodyClasses += " %s"
+					document.getElementsByTagName("body")[0].className = bodyClasses
+				})
+			</script>
+		`, index, classes)
+	}
+
 	if s.javascript != "" {
 		slideMarkup += fmt.Sprintf(`
 			<script>

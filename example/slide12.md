@@ -12,6 +12,21 @@ and change your slide numbers?
 # Styles in you slide...
 .  @css/customstyle.css
 
+# Layouts of special slides ...
+@css/section.css
+@classes/section,frontpage
+. @css/section.css
+. @classes/section,frontpage
+@code/css
+  /* section.css */
+  body.section {
+    color: white;
+  }
+  body.frontpage {
+    background-color: black;
+  }
+these classes are injected to the body tag on the corresponding slide
+
 # ...and background images 
 . @img/example_bg.jpg
 

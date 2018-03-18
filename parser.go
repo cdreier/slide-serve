@@ -18,6 +18,7 @@ type slide struct {
 	code       string
 	image      string
 	styles     string
+	classes		 string
 	javascript string
 	hash       string
 }
