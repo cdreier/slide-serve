@@ -2,6 +2,8 @@
 
 ![Drone Build Status](https://github-drone.d.drailing.net/api/badges/cdreier/slide-serve/status.svg)
 
+![demogif](https://github.com/cdreier/slide-serve/blob/master/demogif/slide-serve-demo.gif)
+
 i really like the idea behind [slide-html](https://github.com/trikita/slide-html) and the [Takahashi method](https://en.wikipedia.org/wiki/Takahashi_method)
 
 you only need to learn 5 pseudo-markdown rules and a few annotations to build a nice presentation.
