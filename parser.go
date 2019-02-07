@@ -84,7 +84,7 @@ func (h *holder) parse() {
 
 func addStyleRule(filename string, slideNumber int) string {
 
-	imgURL := "/static/" + filename
+	imgURL := "/static" + filename
 
 	css := fmt.Sprintf(`.slide-%d {
 background: url("%s");
