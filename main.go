@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"flag"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -72,13 +71,11 @@ func main() {
 
 	http.HandleFunc("/", h.handler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(*rootDir))))
-	http.HandleFunc("/favicon.ico", h.na)
-	fmt.Println("starting on port: " + *port + " for directory " + *rootDir)
-	http.ListenAndServe(":"+*port, nil)
-}
-
-func (h *holder) na(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusNotFound)
+	http.HandleFunc("/favicon.ico", http.NotFound)
+	log.Println("starting on port: " + *port + " for directory " + *rootDir)
+	if err := http.ListenAndServe(":"+*port, nil); err != nil {
+		log.Fatal("cannot start slide-serve server! ", err.Error())
+	}
 }
 
 func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
