@@ -18,7 +18,7 @@ type slide struct {
 	code       string
 	image      string
 	styles     string
-	classes		 string
+	classes    string
 	javascript string
 	hash       string
 }
@@ -99,12 +99,12 @@ background-position: center;
 
 func (h *holder) generateSlides(content string) {
 
-	cleanup := strings.Trim(content, "\n \t")
+	cleanup := strings.Trim(content, "\n\t")
 
 	scanner := bufio.NewScanner(strings.NewReader(cleanup))
 	s := slide{}
 	for scanner.Scan() {
-		tmp := strings.TrimRight(scanner.Text(), "\t ")
+		tmp := strings.TrimRight(scanner.Text(), "\t")
 		if tmp == "" {
 			s.buildHash()
 			h.slides = append(h.slides, s)
