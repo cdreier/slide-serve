@@ -222,3 +222,25 @@ if something wont fit with your presentation styles, you can overwrite the print
 
 -pdf 
 * overwrite the summary print styles with full slide prints (default false)
+
+# deployment
+
+You can deploy on [Zeit Now](https://zeit.co/now) for example by doing the following:
+
+- `npm install -g now`
+- Run your presentation locally without development mode
+- Create an `html` directory: `mkdir html`
+- Inside of the directory do a curl: `curl localhost:8080 -o index.html`
+- Create a `now.json` file with something like this:
+  ```
+  {
+    "version": 2,
+    "name": "name-of-the-presentation",
+    "alias": [
+      "name-of-the-presentation"
+    ]
+  } ```
+- If you have pictures / fonts, create a symlink a folder called `static`. f.e. `ln -s <place-with-images> static/images`
+- Run `now`
+- Now will deploy your presentation.
+- To make it available on https://name-of-the-presentation.now.sh you have to run: `now alias`
