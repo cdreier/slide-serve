@@ -8,9 +8,10 @@ pipeline:
     image: drailing/go_packr_zip
     commands:
       - go test
-      - GOOS=linux GOARCH=amd64 packr build -v -o ${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64
-      - GOOS=darwin GOARCH=amd64 packr build -v -o ${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64
-      - GOOS=windows GOARCH=amd64 packr build -v -o ${DRONE_REPO_NAME}-${DRONE_TAG}-win-amd64.exe
+      - export GO111MODULE=on
+      - GOOS=linux GOARCH=amd64 packr build -v -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64
+      - GOOS=darwin GOARCH=amd64 packr build -v -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64
+      - GOOS=windows GOARCH=amd64 packr build -v -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-win-amd64.exe
       - mkdir release
       - zip release/${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64.zip ${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64
       - zip release/${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64.zip ${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64
