@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"flag"
+	"errors"
 	"html/template"
 	"log"
 	"net/http"
@@ -12,6 +12,7 @@ import (
 
 	"github.com/gobuffalo/packr"
 	"github.com/gorilla/websocket"
+	"github.com/urfave/cli"
 )
 
 type holder struct {
@@ -28,54 +29,89 @@ type holder struct {
 }
 
 func main() {
-	port := flag.String("port", "8080", "http port the server is starting on")
-	rootDir := flag.String("dir", "example", "root dir of your presentation")
-	title := flag.String("title", "Slide", "html title")
-	devMode := flag.Bool("dev", false, "dev true to start a filewatcher and reload the edited slide")
-	codeTheme := flag.String("syntaxhl", "monokai", "code highlighter theme")
-	pdfPrint := flag.Bool("pdf", false, "printing a pdf")
-	slideRatio := flag.String("ratio", "16x9", "ratio of your slides, 4x3, 16x9 or 16x10") // slide-4x3 slide-16x9 slide-16x10
-	// control := flag.Bool("control", false, "attach controller with peer to peer ")
-	flag.Parse()
 
+	app := cli.NewApp()
+	app.Name = "slide-serve"
+	app.Action = run
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:  "dir",
+			Value: "example",
+			Usage: "root dir of your presentation",
+		},
+		cli.StringFlag{
+			Name:  "port",
+			Value: "8080",
+			Usage: "`PORT` to start the http server on",
+		},
+		cli.StringFlag{
+			Name:  "title",
+			Value: "Slide",
+			Usage: "html title",
+		},
+		cli.StringFlag{
+			Name:  "syntaxhl, hl",
+			Value: "monokai",
+			Usage: "code highlighter theme",
+		},
+		cli.StringFlag{
+			Name:  "ratio",
+			Value: "16x9",
+			Usage: "ratio of your slides, 4x3, 16x9 or 16x10",
+		},
+		cli.BoolFlag{
+			Name:  "pdf",
+			Usage: "printing a pdf",
+		},
+		cli.BoolFlag{
+			Name:  "dev",
+			Usage: "dev true to start a filewatcher and reload the edited slide",
+		},
+	}
+
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal("cannot start slide-serve server! ", err.Error())
+	}
+
+}
+
+func run(c *cli.Context) error {
 	isDemo := false
+	rootDir := c.String("dir")
+	devMode := c.Bool("dev")
+	title := c.String("title")
 
-	// if *control {
-	// 	qrterminal.GenerateHalfBlock("http://drailing.net", qrterminal.L, os.Stdout)
-	// }
-
-	if *rootDir == "example" && !dirExist(*rootDir) {
+	if rootDir == "example" && !dirExist(rootDir) {
 		isDemo = true
-		*devMode = false
-		*title = "Slide"
-	} else if !dirExist(*rootDir) {
-		log.Fatal("cannot find root directory :(")
+		devMode = false
+		title = "Slide"
+	} else if !dirExist(rootDir) {
+		return errors.New("cannot find root directory :(")
 	}
 
 	h := holder{
-		dir:        *rootDir,
-		title:      *title,
-		dev:        *devMode,
+		dir:        rootDir,
+		title:      title,
+		dev:        devMode,
 		demo:       isDemo,
-		codeTheme:  *codeTheme,
-		pdfPrint:   *pdfPrint,
-		slideRatio: *slideRatio,
+		codeTheme:  c.String("syntaxhl"),
+		pdfPrint:   c.Bool("pdf"),
+		slideRatio: c.String("ratio"),
 	}
 
 	h.parse()
 
-	if *devMode {
+	if devMode {
 		http.HandleFunc("/ws", h.ws)
-		go h.startFileWatcher(*rootDir)
+		go h.startFileWatcher(rootDir)
 	}
 
 	http.HandleFunc("/", h.handler)
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(*rootDir))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(rootDir))))
 	http.HandleFunc("/favicon.ico", http.NotFound)
-	log.Println("starting on port: " + *port + " for directory " + *rootDir)
-	if err := http.ListenAndServe(":"+*port, nil); err != nil {
-		log.Fatal("cannot start slide-serve server! ", err.Error())
-	}
+	port := c.String("port")
+	log.Println("starting on port: " + port + " for directory " + rootDir)
+	return http.ListenAndServe(":"+port, nil)
 }
 
 func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
