@@ -130,6 +130,11 @@ func (h *holder) generateSlides(content string) {
 				s.code = strings.Replace(tmp, "@code/", "", -1)
 			} else if strings.HasPrefix(tmp, "@classes/") {
 				s.classes = strings.Replace(tmp, "@classes/", "", -1)
+			} else if strings.HasPrefix(tmp, "@append") {
+				prevSlide := h.slides[len(h.slides)-1]
+				buf := s.content
+				s = prevSlide
+				s.content += buf + "\n"
 			} else {
 				s.content += tmp + "\n"
 			}

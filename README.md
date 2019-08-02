@@ -49,6 +49,7 @@ and visit [http://127.0.0.1:8080](http://127.0.0.1:8080)
 `@css/stylesheet.css`  
 `@js/jsfile.js`  
 `@code/language`  
+`@append`  
 
 the path is relative to your presentation directory, if you like to create an image folder it would change to `@img/images/imagename.gif`
 
@@ -91,10 +92,20 @@ setTimeout(() => {
 }, 1000)
 ```
 
-
 example presentation: https://github.com/cdreier/slide-serve/tree/master/example
 
 > to see the example presentation, just run slide-serve without any flags
+
+`@append` appends the current slide to the previous, so you don't have to repeat the whole content.
+
+following example still produces 2 slides, but the second with `#this is` prepended
+
+``` md
+# this is
+
+# awesome
+@append
+```
 
 
 ## syntax highlighter
