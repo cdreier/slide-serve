@@ -134,7 +134,7 @@ func (h *holder) generateSlides(content string) {
 				prevSlide := h.slides[len(h.slides)-1]
 				buf := s.content
 				s = prevSlide
-				s.content += buf + "\n"
+				s.content += buf
 			} else {
 				s.content += tmp + "\n"
 			}
