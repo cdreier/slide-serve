@@ -10,19 +10,22 @@ func Test_holder_generateSlides_append(t *testing.T) {
 # first slide
 
 # second slide
+@append
+
+# third slide
 @append`
 
 	h := holder{}
 	h.slides = make([]slide, 0)
 	h.generateSlides(slideContent)
 
-	expectedSlides := 2
+	expectedSlides := 3
 	got := len(h.slides)
 	if got != expectedSlides {
 		t.Errorf("wanted slides %d, got %d ", expectedSlides, got)
 	}
 
-	expectedLines := [2]int{1, 2}
+	expectedLines := [3]int{1, 2, 3}
 	for i, s := range h.slides {
 		lines := len(strings.Split(s.content, "\n")) - 1 // the -1 strips the newline at the end
 		if lines != expectedLines[i] {
