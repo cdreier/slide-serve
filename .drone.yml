@@ -1,25 +1,32 @@
-workspace:
-  base: /go
-  path: src/github.com/cdreier/slide-serve
+kind: pipeline
+name: default
 
-pipeline:
-
-  build:
+steps:
+  - name: test
     image: drailing/go_packr_zip
     commands:
-      - go test
-      - export GO111MODULE=on
-      - GOOS=linux GOARCH=amd64 packr build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64
-      - GOOS=darwin GOARCH=amd64 packr build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64
-      - GOOS=windows GOARCH=amd64 packr build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-win-amd64.exe
+    - go test 
+
+  - name: build
+    image: drailing/go_packr_zip
+    environment:
+      GO111MODULE: on
+    commands:
+      - packr2
+      - GOOS=linux GOARCH=amd64 go build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64
+      - GOOS=darwin GOARCH=amd64 go build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64
+      - GOOS=windows GOARCH=amd64 go build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-win-amd64.exe
       - mkdir release
       - zip release/${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64.zip ${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64
       - zip release/${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64.zip ${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64
       - zip release/${DRONE_REPO_NAME}-${DRONE_TAG}-win-amd64.zip ${DRONE_REPO_NAME}-${DRONE_TAG}-win-amd64.exe
 
-  github_release:
+  - name: github_release
     image: plugins/github-release
-    secrets: [ github_token ]
-    files: release/*
+    settings:
+      api_key:
+        from_secret: github_token
+      files: 
+        - release/*
     when:
       event: tag
