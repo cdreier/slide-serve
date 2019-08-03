@@ -5,9 +5,6 @@ beautiful
 # custom styles
 @css/blue.css
 
-with css
-@append
-
 # gifs!
 
 .

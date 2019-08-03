@@ -1,0 +1,5 @@
+.slide-SLIDENUMBER .slide-content p {
+  list-style-type: disc; 
+  display: list-item;
+  text-align: left;
+}

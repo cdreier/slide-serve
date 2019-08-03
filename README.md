@@ -137,6 +137,35 @@ all the rest is basic go code, with dependencies managed by [dep](https://github
 
 # useful snippets
 
+## list items popping up
+
+first, lets make the paragraphs looks like list-items
+
+```css 
+.slide-SLIDENUMBER .slide-content p {
+  list-style-type: disc; 
+  display: list-item;
+  text-align: left;
+}
+```
+
+and then use append for every item
+
+```md
+# lists
+@css/list.css
+
+new list item 
+@append
+
+next item
+@append
+
+item 3
+@append
+```
+
+
 ## restarting gifs
 
 as gifs are looping in the background, this script reloads the gif every time you enter the slide
