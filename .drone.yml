@@ -4,8 +4,10 @@ name: default
 steps:
   - name: test
     image: drailing/go_packr_zip
+    environment:
+      GO111MODULE: on
     commands:
-    - go test 
+    - go test -mod vendor
 
   - name: build
     image: drailing/go_packr_zip
