@@ -1,25 +1,24 @@
-workspace:
-  base: /go
-  path: src/github.com/cdreier/slide-serve
+---
+kind: pipeline
+name: default
 
-pipeline:
-
-  build:
-    image: drailing/go_packr_zip
+steps:
+  - name: fetch
+    image: docker:git
     commands:
-      - go test
-      - export GO111MODULE=on
-      - GOOS=linux GOARCH=amd64 packr build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64
-      - GOOS=darwin GOARCH=amd64 packr build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64
-      - GOOS=windows GOARCH=amd64 packr build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-win-amd64.exe
-      - mkdir release
-      - zip release/${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64.zip ${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64
-      - zip release/${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64.zip ${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64
-      - zip release/${DRONE_REPO_NAME}-${DRONE_TAG}-win-amd64.zip ${DRONE_REPO_NAME}-${DRONE_TAG}-win-amd64.exe
+      - git fetch --tags
 
-  github_release:
-    image: plugins/github-release
-    secrets: [ github_token ]
-    files: release/*
+  - name: test
+    image: golang
+    commands:
+      - go test -v
+  
+  - name: release
+    image: golang
+    environment:
+      GITHUB_TOKEN:
+        from_secret: github_token
+    commands:
+      - curl -sL https://git.io/goreleaser | bash
     when:
       event: tag
