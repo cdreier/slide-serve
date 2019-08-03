@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/websocket"
 	"github.com/urfave/cli"
 )
@@ -115,7 +115,7 @@ func run(c *cli.Context) error {
 }
 
 func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
-	box := packr.NewBox("./www")
+	box := packr.New("wwwBox", "./www")
 	t, _ := template.New("slide").Parse(box.String("slide.html"))
 
 	slides := ""

@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 )
 
 type slide struct {
@@ -39,7 +39,7 @@ type slideContent struct {
 func (h *holder) parse() {
 	if h.demo {
 		// example presentation
-		exampleBox := packr.NewBox("./example")
+		exampleBox := packr.New("exampleBox","./example")
 		fmt.Println("serving example presentation")
 		all := exampleBox.List()
 		sort.Strings(all)
