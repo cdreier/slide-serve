@@ -39,7 +39,7 @@ type slideContent struct {
 func (h *holder) parse() {
 	if h.demo {
 		// example presentation
-		exampleBox := packr.New("exampleBox","./example")
+		exampleBox := packr.New("exampleBox", "./example")
 		fmt.Println("serving example presentation")
 		all := exampleBox.List()
 		sort.Strings(all)
@@ -101,14 +101,19 @@ func (h *holder) generateSlides(content string) {
 
 	cleanup := strings.Trim(content, "\n\t")
 
+	skipSlide := false
 	scanner := bufio.NewScanner(strings.NewReader(cleanup))
 	s := slide{}
 	for scanner.Scan() {
 		tmp := strings.TrimRight(scanner.Text(), "\t")
+		// empty line marks new slide
 		if tmp == "" {
-			s.buildHash()
-			h.slides = append(h.slides, s)
-			s = slide{}
+			if !skipSlide {
+				s.buildHash()
+				h.slides = append(h.slides, s)
+				s = slide{}
+			}
+			skipSlide = false
 		} else {
 			if strings.HasPrefix(tmp, "@img") {
 				s.image = strings.Replace(tmp, "@img", "", -1)
@@ -135,12 +140,16 @@ func (h *holder) generateSlides(content string) {
 				buf := s.content
 				s = prevSlide
 				s.content += buf
+			} else if strings.HasPrefix(tmp, "@skip") {
+				skipSlide = true
 			} else {
 				s.content += tmp + "\n"
 			}
 		}
 	}
-	s.buildHash()
-	h.slides = append(h.slides, s)
+	if !skipSlide {
+		s.buildHash()
+		h.slides = append(h.slides, s)
+	}
 
 }

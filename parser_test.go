@@ -65,6 +65,28 @@ for tests
 @append`,
 			expectedSlides: 2,
 		},
+		{
+			name: "test with skip",
+			slideContent: `
+# first slide
+
+@skip
+# second slide`,
+			expectedSlides: 1,
+		},
+		{
+			name: "test with skip and append",
+			slideContent: `
+# first slide
+
+@skip
+# second slide
+@append
+
+# third slide
+@append`,
+			expectedSlides: 2,
+		},
 	}
 	h := holder{}
 	for _, tt := range tests {
