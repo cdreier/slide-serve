@@ -66,20 +66,20 @@ for tests
 			expectedSlides: 2,
 		},
 		{
-			name: "test with skip",
+			name: "test with hide",
 			slideContent: `
 # first slide
 
-@skip
+@hide
 # second slide`,
 			expectedSlides: 1,
 		},
 		{
-			name: "test with skip and append",
+			name: "test with hide and append",
 			slideContent: `
 # first slide
 
-@skip
+@hide
 # second slide
 @append
 

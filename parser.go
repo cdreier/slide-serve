@@ -101,19 +101,19 @@ func (h *holder) generateSlides(content string) {
 
 	cleanup := strings.Trim(content, "\n\t")
 
-	skipSlide := false
+	hideSlide := false
 	scanner := bufio.NewScanner(strings.NewReader(cleanup))
 	s := slide{}
 	for scanner.Scan() {
 		tmp := strings.TrimRight(scanner.Text(), "\t")
 		// empty line marks new slide
 		if tmp == "" {
-			if !skipSlide {
+			if !hideSlide {
 				s.buildHash()
 				h.slides = append(h.slides, s)
-				s = slide{}
 			}
-			skipSlide = false
+			s = slide{}
+			hideSlide = false
 		} else {
 			if strings.HasPrefix(tmp, "@img") {
 				s.image = strings.Replace(tmp, "@img", "", -1)
@@ -140,14 +140,14 @@ func (h *holder) generateSlides(content string) {
 				buf := s.content
 				s = prevSlide
 				s.content += buf
-			} else if strings.HasPrefix(tmp, "@skip") {
-				skipSlide = true
+			} else if strings.HasPrefix(tmp, "@hide") {
+				hideSlide = true
 			} else {
 				s.content += tmp + "\n"
 			}
 		}
 	}
-	if !skipSlide {
+	if !hideSlide {
 		s.buildHash()
 		h.slides = append(h.slides, s)
 	}

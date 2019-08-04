@@ -1,6 +1,9 @@
 organized in
 # several files!
 
+@hide
+# with hidden slides
+
 # lists
 @css/list.css
 
