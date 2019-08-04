@@ -32,7 +32,34 @@ func Test_holder_generateSlides_append(t *testing.T) {
 			t.Errorf("wanted slide-lines %d, got %d ", expectedLines[i], lines)
 		}
 	}
+}
 
+func Test_holder_generateSlides_hide(t *testing.T) {
+	slideContent := `
+# first slide
+
+# second slide
+@hidden
+
+# third slide`
+
+	h := holder{}
+	h.slides = make([]slide, 0)
+	h.generateSlides(slideContent)
+
+	expectedSlides := 2
+	got := len(h.slides)
+	if got != expectedSlides {
+		t.Errorf("wanted slides %d, got %d ", expectedSlides, got)
+	}
+
+	expectedLines := [2]int{1, 1}
+	for i, s := range h.slides {
+		lines := len(strings.Split(s.content, "\n")) - 1 // the -1 strips the newline at the end
+		if lines != expectedLines[i] {
+			t.Errorf("wanted slide-lines %d, got %d ", expectedLines[i], lines)
+		}
+	}
 }
 
 func Test_holder_generateSlides(t *testing.T) {
@@ -66,20 +93,20 @@ for tests
 			expectedSlides: 2,
 		},
 		{
-			name: "test with hide",
+			name: "test with hidden",
 			slideContent: `
 # first slide
 
-@hide
+@hidden
 # second slide`,
 			expectedSlides: 1,
 		},
 		{
-			name: "test with hide and append",
+			name: "test with hidden and append",
 			slideContent: `
 # first slide
 
-@hide
+@hidden
 # second slide
 @append
 

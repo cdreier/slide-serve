@@ -140,7 +140,7 @@ func (h *holder) generateSlides(content string) {
 				buf := s.content
 				s = prevSlide
 				s.content += buf
-			} else if strings.HasPrefix(tmp, "@hide") {
+			} else if strings.HasPrefix(tmp, "@hidden") {
 				hideSlide = true
 			} else {
 				s.content += tmp + "\n"

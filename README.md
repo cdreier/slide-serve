@@ -50,7 +50,7 @@ and visit [http://127.0.0.1:8080](http://127.0.0.1:8080)
 `@js/jsfile.js`  
 `@code/language`  
 `@append`  
-`@hide`  
+`@hidden`  
 
 the path is relative to your presentation directory, if you like to create an image folder it would change to `@img/images/imagename.gif`
 

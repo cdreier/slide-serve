@@ -1,7 +1,7 @@
 organized in
 # several files!
 
-@hide
+@hidden
 # with hidden slides
 
 # lists
