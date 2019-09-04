@@ -202,16 +202,15 @@ in the past, i needed a down-scaling of the images - if you want to reset this b
 
 ## add a logo on every slide
 
-you can add more background images - so we add one default image in the `styles.css`
+i added an empty div at the end of the presentation HTML, so we can just use it in our global `styles.css`
 
 ```css
-body {
+#logo {
   font-family: Vollkorn;
   background-color: #e2e4e6;
   background-image: url("/static/images/your_logo.png");
   background-repeat: no-repeat;
   background-position: right 10px top 10px;
-  background-size: 15%, auto;
 }
 ```
 
