@@ -140,7 +140,7 @@ func getHighlightedMarkup(code string, lang string, codeTheme string) (string, s
 
 	// formatter := formatters.Get("html")
 	// formatter := formatters.Get("noop")
-	formatter := html.New(html.WithClasses())
+	formatter := html.New(html.WithClasses(true))
 	// if formatter == nil {
 	// 	formatter = formatters.Fallback
 	// }

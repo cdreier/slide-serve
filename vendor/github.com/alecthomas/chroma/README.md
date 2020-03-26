@@ -35,7 +35,7 @@ translators for Pygments lexers and styles.
 
 Prefix | Language
 :----: | --------
-A | ABNF, ActionScript, ActionScript 3, Ada, Angular2, ANTLR, ApacheConf, APL, AppleScript, Arduino, Awk
+A | ABAP, ABNF, ActionScript, ActionScript 3, Ada, Angular2, ANTLR, ApacheConf, APL, AppleScript, Arduino, Awk
 B | Ballerina, Base Makefile, Bash, Batchfile, BlitzBasic, BNF, Brainfuck
 C | C, C#, C++, Cap'n Proto, Cassandra CQL, Ceylon, CFEngine3, cfstatement, ChaiScript, Cheetah, Clojure, CMake, COBOL, CoffeeScript, Common Lisp, Coq, Crystal, CSS, Cython
 D | D, Dart, Diff, Django/Jinja, Docker, DTD
@@ -44,17 +44,17 @@ F | Factor, Fish, Forth, Fortran, FSharp
 G | GAS, GDScript, Genshi, Genshi HTML, Genshi Text, GLSL, Gnuplot, Go, Go HTML Template, Go Text Template, GraphQL, Groovy
 H | Handlebars, Haskell, Haxe, HCL, Hexdump, HTML, HTTP, Hy
 I | Idris, INI, Io
-J | Java, JavaScript, JSON, Julia, Jungle
+J | J, Java, JavaScript, JSON, Julia, Jungle
 K | Kotlin
 L | Lighttpd configuration file, LLVM, Lua
-M | Mako, markdown, Mason, Mathematica, Matlab, MiniZinc, Modula-2, MonkeyC, MorrowindScript, Myghty, MySQL
+M | Mako, markdown, Mason, Mathematica, Matlab, MiniZinc, MLIR, Modula-2, MonkeyC, MorrowindScript, Myghty, MySQL
 N | NASM, Newspeak, Nginx configuration file, Nim, Nix
 O | Objective-C, OCaml, Octave, OpenSCAD, Org Mode
 P | PacmanConf, Perl, PHP, Pig, PkgConfig, PL/pgSQL, plaintext, PostgreSQL SQL dialect, PostScript, POVRay, PowerShell, Prolog, Protocol Buffer, Puppet, Python, Python 3
 Q | QBasic
 R | R, Racket, Ragel, react, reg, reStructuredText, Rexx, Ruby, Rust
-S | Sass, Scala, Scheme, Scilab, SCSS, Smalltalk, Smarty, Snobol, Solidity, SPARQL, SQL, SquidConf, Swift, SYSTEMD, systemverilog
-T | TASM, Tcl, Tcsh, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, Turing, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData
+S | Sass, Scala, Scheme, Scilab, SCSS, Smalltalk, Smarty, SML, Snobol, Solidity, SPARQL, SQL, SquidConf, Swift, SYSTEMD, systemverilog
+T | TableGen, TASM, Tcl, Tcsh, Termcap, Terminfo, Terraform, TeX, Thrift, TOML, TradingView, Transact-SQL, Turing, Turtle, Twig, TypeScript, TypoScript, TypoScriptCssData, TypoScriptHtmlData
 V | VB.net, verilog, VHDL, VimL, vue
 W | WDTE
 X | XML, Xorg
@@ -183,6 +183,7 @@ following constructor options:
 - `ClassPrefix(prefix)` - prefix each generated CSS class.
 - `TabWidth(width)` - Set the rendered tab width, in characters.
 - `WithLineNumbers()` - Render line numbers (style with `LineNumbers`).
+- `LinkableLineNumbers()` - Make the line numbers linkable.
 - `HighlightLines(ranges)` - Highlight lines in these ranges (style with `LineHighlight`).
 - `LineNumbersInTable()` - Use a table for formatting line numbers and code, rather than spans.
 

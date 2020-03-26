@@ -4,14 +4,15 @@ import (
 	"bytes"
 	"errors"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 
-	"github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/websocket"
+	"github.com/markbates/pkger"
 	"github.com/urfave/cli"
 )
 
@@ -115,8 +116,9 @@ func run(c *cli.Context) error {
 }
 
 func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
-	box := packr.New("wwwBox", "./www")
-	t, _ := template.New("slide").Parse(box.String("slide.html"))
+	wwwDir := pkger.Dir("/www")
+	slideFile, _ := wwwDir.Open("slide.html")
+	t, _ := template.New("slide").Parse(mustFileToString(slideFile))
 
 	slides := ""
 	styles := h.styles
@@ -137,21 +139,22 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	printStyles := box.String("summaryStyle.css")
+	cssFile, _ := wwwDir.Open("summaryStyle.css")
 	if h.pdfPrint {
-		printStyles = box.String("pdfStyle.css")
+		cssFile, _ = wwwDir.Open("pdfStyle.css")
 	}
 
 	s := slideContent{
 		Slides:     template.HTML(slides),
 		Styles:     template.CSS(styles),
-		PrintStyle: template.CSS(printStyles),
+		PrintStyle: template.CSS(mustFileToString(cssFile)),
 		Title:      h.title,
 		SlideRatio: h.slideRatio,
 	}
 
 	if h.dev {
-		js, _ := template.New("devmode").Parse(box.String("devMode.html"))
+		devModeFile, _ := wwwDir.Open("devMode.html")
+		js, _ := template.New("devmode").Parse(mustFileToString(devModeFile))
 		var buf bytes.Buffer
 		data := make(map[string]string)
 		data["url"] = "ws://" + r.Host + "/ws"
@@ -173,4 +176,12 @@ func dirExist(dir string) bool {
 		return true
 	}
 	return !os.IsNotExist(err)
+}
+
+func mustFileToString(f http.File) string {
+	content, err := ioutil.ReadAll(f)
+	if err != nil {
+		log.Fatal("must read file to string failed: ", err.Error())
+	}
+	return string(content)
 }

@@ -132,9 +132,7 @@ example (the position of the `@code` annotation does not matter)
 
 ## build your own
 
-i used [packr](https://github.com/gobuffalo/packr) to embedd the html template in the binary
-
-all the rest is basic go code, with dependencies managed by [dep](https://github.com/golang/dep)
+i used [pkger](https://github.com/markbates/pkger) to embedd the html template in the binary
 
 # useful snippets
 

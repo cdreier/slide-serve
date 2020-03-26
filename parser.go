@@ -7,10 +7,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 
-	"github.com/gobuffalo/packr/v2"
+	"github.com/markbates/pkger"
 )
 
 type slide struct {
@@ -39,19 +38,22 @@ type slideContent struct {
 func (h *holder) parse() {
 	if h.demo {
 		// example presentation
-		exampleBox := packr.New("exampleBox", "./example")
 		fmt.Println("serving example presentation")
-		all := exampleBox.List()
-		sort.Strings(all)
-		for _, path := range all {
+
+		pkger.Walk("/example", func(path string, info os.FileInfo, err error) error {
+
 			if filepath.Base(path) == "styles.css" {
-				h.styles += exampleBox.String(path)
+				f, _ := pkger.Open(path)
+				h.styles += mustFileToString(f)
 			}
 
 			if filepath.Ext(path) == ".md" {
-				h.generateSlides(exampleBox.String(path))
+				f, _ := pkger.Open(path)
+				h.generateSlides(mustFileToString(f))
 			}
-		}
+
+			return nil
+		})
 
 	} else {
 		// user presentation

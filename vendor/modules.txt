@@ -1,8 +1,7 @@
-# github.com/alecthomas/chroma v0.6.6
+# github.com/alecthomas/chroma v0.7.1
 github.com/alecthomas/chroma
 github.com/alecthomas/chroma/formatters/html
 github.com/alecthomas/chroma/lexers
-github.com/alecthomas/chroma/styles
 github.com/alecthomas/chroma/lexers/a
 github.com/alecthomas/chroma/lexers/b
 github.com/alecthomas/chroma/lexers/c
@@ -29,48 +28,30 @@ github.com/alecthomas/chroma/lexers/v
 github.com/alecthomas/chroma/lexers/w
 github.com/alecthomas/chroma/lexers/x
 github.com/alecthomas/chroma/lexers/y
+github.com/alecthomas/chroma/styles
+# github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d
+github.com/cpuguy83/go-md2man/v2/md2man
 # github.com/danwakefield/fnmatch v0.0.0-20160403171240-cbb64ac3d964
 github.com/danwakefield/fnmatch
 # github.com/dlclark/regexp2 v1.1.6
 github.com/dlclark/regexp2
 github.com/dlclark/regexp2/syntax
-# github.com/fsnotify/fsnotify v1.4.7
+# github.com/fsnotify/fsnotify v1.4.9
 github.com/fsnotify/fsnotify
-# github.com/gobuffalo/envy v1.7.0
-github.com/gobuffalo/envy
-# github.com/gobuffalo/logger v1.0.0
-github.com/gobuffalo/logger
-# github.com/gobuffalo/packd v0.3.0
-github.com/gobuffalo/packd
-github.com/gobuffalo/packd/internal/takeon/github.com/markbates/errx
-# github.com/gobuffalo/packr/v2 v2.5.1
-github.com/gobuffalo/packr/v2
-github.com/gobuffalo/packr/v2/file
-github.com/gobuffalo/packr/v2/file/resolver
-github.com/gobuffalo/packr/v2/internal/takeon/github.com/markbates/oncer
-github.com/gobuffalo/packr/v2/internal/takeon/github.com/markbates/safe
-github.com/gobuffalo/packr/v2/jam/parser
-github.com/gobuffalo/packr/v2/plog
-github.com/gobuffalo/packr/v2/file/resolver/encoding/hex
-github.com/gobuffalo/packr/v2/internal/takeon/github.com/markbates/errx
-# github.com/gorilla/websocket v1.4.0
+# github.com/gobuffalo/here v0.6.0
+github.com/gobuffalo/here
+# github.com/gorilla/websocket v1.4.2
 github.com/gorilla/websocket
-# github.com/joho/godotenv v1.3.0
-github.com/joho/godotenv
-# github.com/karrick/godirwalk v1.10.12
-github.com/karrick/godirwalk
-# github.com/konsorten/go-windows-terminal-sequences v1.0.2
-github.com/konsorten/go-windows-terminal-sequences
-# github.com/rogpeppe/go-internal v1.3.0
-github.com/rogpeppe/go-internal/modfile
-github.com/rogpeppe/go-internal/module
-github.com/rogpeppe/go-internal/semver
-# github.com/sirupsen/logrus v1.4.2
-github.com/sirupsen/logrus
-# github.com/urfave/cli v1.20.0
+# github.com/markbates/pkger v0.15.0
+github.com/markbates/pkger
+github.com/markbates/pkger/internal/maps
+github.com/markbates/pkger/pkging
+github.com/markbates/pkger/pkging/stdos
+# github.com/russross/blackfriday/v2 v2.0.1
+github.com/russross/blackfriday/v2
+# github.com/shurcooL/sanitized_anchor_name v1.0.0
+github.com/shurcooL/sanitized_anchor_name
+# github.com/urfave/cli v1.22.3
 github.com/urfave/cli
-# golang.org/x/crypto v0.0.0-20190621222207-cc06ce4a13d4
-golang.org/x/crypto/ssh/terminal
-# golang.org/x/sys v0.0.0-20190515120540-06a5c4944438
+# golang.org/x/sys v0.0.0-20191005200804-aed5e4c7ecf9
 golang.org/x/sys/unix
-golang.org/x/sys/windows

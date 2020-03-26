@@ -14,7 +14,7 @@ steps:
     environment:
       GO111MODULE: on
     commands:
-      - packr2
+      - pkger
       - GOOS=linux GOARCH=amd64 go build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-linux-amd64
       - GOOS=darwin GOARCH=amd64 go build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-darwin-amd64
       - GOOS=windows GOARCH=amd64 go build -mod vendor -o ${DRONE_REPO_NAME}-${DRONE_TAG}-win-amd64.exe
