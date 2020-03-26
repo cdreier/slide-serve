@@ -4,22 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Presenting {{.Title}}</title>
-    <style>*{margin:0;padding:0;box-sizing:border-box}#slide{display:none}.slide{white-space:nowrap}.slide-content{align-self:center}@media screen{body{position:absolute;top:50%;left:50%}.slide-4x3{width:1024px;height:768px;margin:-384px 0 0 -512px}.slide-16x9{width:1024px;height:576px;margin:-288px 0 0 -512px}.slide-16x10{width:1024px;height:640px;margin:-320px 0 0 -512px}.slide{position:absolute;width:100%;height:100%;display:flex;justify-content:center;overflow:hidden}}</style>
+    <style>*{margin:0;padding:0;box-sizing:border-box}#slide{display:none}.slide{white-space:nowrap}.slide-content{align-self:center}@media screen{.slide-4x3{width:1024px;height:768px;margin:-384px 0 0 -512px}.slide-16x9{width:1024px;height:576px;margin:-288px 0 0 -512px}.slide-16x10{width:1024px;height:640px;margin:-320px 0 0 -512px}.slide{position:absolute;width:100%;height:100%;display:flex;justify-content:center;overflow:hidden}}</style>
     <style >
       #preview {
         display: flex;
-        width: 1024px;
         height: 576px;
       }
       .slide-root.current {
         flex: 1;
-        background-color: green;
         position: relative;
+        border: 1px solid #333;
       }
       .slide-root.next {
         flex: 1;
-        background-color: aqua;
         position: relative;
+        border: 1px solid #333;
       }
     </style>
     <style >{{.Styles}}</style>
@@ -46,12 +45,12 @@
       window.onload = function() {
         resize();
         var tmpSlideFromHash = parseInt(window.location.hash.substring(1)||0, 10)
-        // window.onclick = next;
-        // window.onresize = resize;
+        window.onclick = emitNext;
 
-        var slides = document.querySelectorAll('.slide');
-        slides[0].style.visibility = '';
-        slides[1].style.visibility = '';
+        var currentSlides = document.querySelectorAll('.current .slide');
+        var nextSlides = document.querySelectorAll('.next .slide');
+        currentSlides[0].style.visibility = '';
+        nextSlides[1].style.visibility = '';
 
         window.onkeydown = function(e) {
           if (e.keyCode == 39) {
