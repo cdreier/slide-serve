@@ -4,6 +4,7 @@ regular font
 beautiful
 # custom styles
 @css/blue.css
+@note such beautiful styles
 
 # gifs!
 

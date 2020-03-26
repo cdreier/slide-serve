@@ -117,6 +117,12 @@ func (h *holder) generateSlides(content string) {
 			s = slide{}
 			hideSlide = false
 		} else {
+
+			// speaker note, just move on for now
+			if strings.HasPrefix(tmp, "@note") {
+				continue
+			}
+
 			if strings.HasPrefix(tmp, "@img") {
 				s.image = strings.Replace(tmp, "@img", "", -1)
 			} else if strings.HasPrefix(tmp, "@css") {
