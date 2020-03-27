@@ -12,7 +12,7 @@ import (
 )
 
 type presenterMsg struct {
-	Type string
+	Type string `json:"type,omitempty"`
 }
 
 func (h *holder) presenterSocket(w http.ResponseWriter, r *http.Request) {
@@ -35,10 +35,25 @@ func (h *holder) presenterSocket(w http.ResponseWriter, r *http.Request) {
 		json.Unmarshal(message, &msg)
 
 		switch msg.Type {
-		case "presenter:":
+		case "next":
+			if h.presenterCon != nil {
+				h.presenterCon.WriteJSON(presenterMsg{
+					Type: "requestNext",
+				})
+			} else {
+				log.Println("presenter socker is null")
+			}
+			break
+		case "prev":
+			if h.presenterCon != nil {
+				h.presenterCon.WriteJSON(presenterMsg{
+					Type: "requestPrev",
+				})
+			}
 			break
 		case "presentation:join":
 			h.presenterCon = connection
+			log.Println("presentation joined")
 			break
 		}
 		// err = connection.WriteMessage(mt, message)
