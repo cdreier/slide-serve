@@ -21,7 +21,7 @@ func (h *holder) ws(w http.ResponseWriter, r *http.Request) {
 	}
 	defer connection.Close()
 
-	h.connection = connection
+	h.devCon = connection
 
 	for {
 		// mt, message, err := connection.ReadMessage()
@@ -84,14 +84,14 @@ func (h *holder) startFileWatcher(dir string) {
 	eventChan := make(chan string)
 	go debounce(time.Second, eventChan, func(name string) {
 		fmt.Println("reloading... ", name)
-		if h.connection != nil {
+		if h.devCon != nil {
 
 			jsonPayload := make(map[string]string)
 			jsonPayload["do"] = "reload"
 			jsonPayload["slide"] = findChangedSlide(h)
 			fmt.Println("changed slide: ", jsonPayload["slide"])
 
-			h.connection.WriteJSON(jsonPayload)
+			h.devCon.WriteJSON(jsonPayload)
 		}
 	})
 

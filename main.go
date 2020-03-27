@@ -17,16 +17,17 @@ import (
 )
 
 type holder struct {
-	dir        string
-	demo       bool
-	title      string
-	slides     []slide
-	styles     string
-	dev        bool
-	pdfPrint   bool
-	codeTheme  string
-	slideRatio string
-	connection *websocket.Conn
+	dir          string
+	demo         bool
+	title        string
+	slides       []slide
+	styles       string
+	dev          bool
+	pdfPrint     bool
+	codeTheme    string
+	slideRatio   string
+	devCon       *websocket.Conn
+	presenterCon *websocket.Conn
 }
 
 func main() {
@@ -109,46 +110,12 @@ func run(c *cli.Context) error {
 
 	http.HandleFunc("/", h.handler)
 	http.HandleFunc("/presenter", h.presenterHandler)
+	http.HandleFunc("/presenterws", h.presenterSocket)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(rootDir))))
 	http.HandleFunc("/favicon.ico", http.NotFound)
 	port := c.String("port")
 	log.Println("starting on port: " + port + " for directory " + rootDir)
 	return http.ListenAndServe(":"+port, nil)
-}
-
-func (h *holder) presenterHandler(w http.ResponseWriter, r *http.Request) {
-	wwwDir := pkger.Dir("/www")
-	slideFile, _ := wwwDir.Open("presenter.html")
-	t, _ := template.New("slide").Parse(mustFileToString(slideFile))
-
-	slides := ""
-	styles := h.styles
-
-	for i, s := range h.slides {
-		slides += renderSlide(s, i, h.codeTheme)
-
-		if s.image != "" {
-			styles += "\n"
-			styles += addStyleRule(s.image, i)
-		}
-
-		if s.styles != "" {
-			styles += "\n"
-			slideStyle := strings.Replace(s.styles, "SLIDENUMBER", strconv.Itoa(i), -1)
-			styles += slideStyle
-		}
-
-	}
-
-	s := slideContent{
-		Slides:     template.HTML(slides),
-		Styles:     template.CSS(styles),
-		PrintStyle: template.CSS(""),
-		Title:      h.title,
-		SlideRatio: h.slideRatio,
-	}
-
-	t.Execute(w, s)
 }
 
 func (h *holder) handler(w http.ResponseWriter, r *http.Request) {

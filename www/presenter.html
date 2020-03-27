@@ -23,6 +23,12 @@
     </style>
     <style >{{.Styles}}</style>
     <script>
+
+      var ws = null
+      var currentSlide = -1;
+      var currentSlides = null
+      var nextSlides = null
+
       function resize() {
         var w = window.innerWidth;
         var h = window.innerHeight;
@@ -32,26 +38,54 @@
         document.body.style.transform = 'scale(' + scale + ')';
       }
 
-      var currentSlide = -1;
+      function startSocket(){
+        ws = new WebSocket("ws://"+location.host+"/presenterws");
+        ws.onopen = function(){
+          ws.send(JSON.stringify({
+            type: "presenter:join",
+          }))
+        }
+      }
 
       function emitNext() {
-        // goTo(Math.min(currentSlide + 1, document.querySelectorAll('.slide').length - 1));
+        goTo(Math.min(currentSlide +1, currentSlides.length -1))
+        ws.send(JSON.stringify({
+          type: "next",
+        }))
       }
 
       function emitPrev() {
-        // goTo(Math.max(currentSlide - 1, 0));
+        goTo(Math.max(currentSlide -1, 0))
+        ws.send(JSON.stringify({
+          type: "prev",
+        }))
+      }
+
+      function goTo(index) {
+        // hide all
+        function hide(el){
+          el.style.visibility = 'hidden';
+        }
+        function show(el){
+          el.style.visibility = '';
+        }
+        currentSlides.forEach(hide)
+        nextSlides.forEach(hide)
+
+        if(index < currentSlides.length){
+          show(currentSlides[index])
+        }
+        if(index+1 < nextSlides.length){
+          show(nextSlides[index+1])
+        }
+
+        currentSlide = index
+        window.location.hash = index;
       }
 
       window.onload = function() {
         resize();
-        var tmpSlideFromHash = parseInt(window.location.hash.substring(1)||0, 10)
         window.onclick = emitNext;
-
-        var currentSlides = document.querySelectorAll('.current .slide');
-        var nextSlides = document.querySelectorAll('.next .slide');
-        currentSlides[0].style.visibility = '';
-        nextSlides[1].style.visibility = '';
-
         window.onkeydown = function(e) {
           if (e.keyCode == 39) {
             emitNext()
@@ -59,6 +93,14 @@
             emitPrev()
           }
         };
+
+        startSocket();
+        currentSlides = document.querySelectorAll('.current .slide');
+        nextSlides = document.querySelectorAll('.next .slide');
+
+        var tmpSlideFromHash = parseInt(window.location.hash.substring(1)||0, 10)
+        goTo(tmpSlideFromHash);
+
       };
     </script>
   </head>
