@@ -28,13 +28,14 @@ func (s *slide) buildHash() {
 }
 
 type slideContent struct {
-	Slides     template.HTML
-	Notes      template.HTML
-	Title      string
-	SlideRatio string
-	Styles     template.CSS
-	PrintStyle template.CSS
-	DevMode    template.HTML
+	Slides        template.HTML
+	Notes         template.HTML
+	Title         string
+	SlideRatio    string
+	Styles        template.CSS
+	PrintStyle    template.CSS
+	DevMode       template.HTML
+	ClickListener template.JS
 }
 
 func (h *holder) parse() {

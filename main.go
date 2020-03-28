@@ -24,6 +24,7 @@ type holder struct {
 	styles       string
 	dev          bool
 	pdfPrint     bool
+	clickEnabled bool
 	codeTheme    string
 	slideRatio   string
 	devCon       *websocket.Conn
@@ -69,6 +70,10 @@ func main() {
 			Name:  "dev",
 			Usage: "dev true to start a filewatcher and reload the edited slide",
 		},
+		cli.BoolFlag{
+			Name:  "enableClick, click, c",
+			Usage: "on default you only navigate with arrow keys, this enabled 'next slide' on click",
+		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
@@ -92,13 +97,14 @@ func run(c *cli.Context) error {
 	}
 
 	h := holder{
-		dir:        rootDir,
-		title:      title,
-		dev:        devMode,
-		demo:       isDemo,
-		codeTheme:  c.String("syntaxhl"),
-		pdfPrint:   c.Bool("pdf"),
-		slideRatio: c.String("ratio"),
+		dir:          rootDir,
+		title:        title,
+		dev:          devMode,
+		demo:         isDemo,
+		codeTheme:    c.String("syntaxhl"),
+		pdfPrint:     c.Bool("pdf"),
+		slideRatio:   c.String("ratio"),
+		clickEnabled: c.Bool("enableClick"),
 	}
 
 	h.parse()
@@ -148,11 +154,16 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	s := slideContent{
-		Slides:     template.HTML(slides),
-		Styles:     template.CSS(styles),
-		PrintStyle: template.CSS(mustFileToString(cssFile)),
-		Title:      h.title,
-		SlideRatio: h.slideRatio,
+		Slides:        template.HTML(slides),
+		Styles:        template.CSS(styles),
+		PrintStyle:    template.CSS(mustFileToString(cssFile)),
+		Title:         h.title,
+		SlideRatio:    h.slideRatio,
+		ClickListener: "",
+	}
+
+	if h.clickEnabled {
+		s.ClickListener = "window.onclick = next;"
 	}
 
 	if h.dev {

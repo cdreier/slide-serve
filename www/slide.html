@@ -77,7 +77,9 @@
         resize();
         var tmpSlideFromHash = parseInt(window.location.hash.substring(1)||0, 10)
         goTo(tmpSlideFromHash);
-        window.onclick = next;
+
+        {{.ClickListener}}
+        
         window.onresize = resize;
         window.onkeydown = function(e) {
           if (e.keyCode == 39) {
