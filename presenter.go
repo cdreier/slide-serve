@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -70,10 +71,12 @@ func (h *holder) presenterHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.New("slide").Parse(mustFileToString(slideFile))
 
 	slides := ""
+	notes := ""
 	styles := h.styles
 
 	for i, s := range h.slides {
 		slides += renderSlide(s, i, h.codeTheme)
+		notes += fmt.Sprintf("<div class=\"note\">%s</div>", s.notes)
 
 		if s.image != "" {
 			styles += "\n"
@@ -90,6 +93,7 @@ func (h *holder) presenterHandler(w http.ResponseWriter, r *http.Request) {
 
 	s := slideContent{
 		Slides:     template.HTML(slides),
+		Notes:      template.HTML(notes),
 		Styles:     template.CSS(styles),
 		PrintStyle: template.CSS(""),
 		Title:      h.title,

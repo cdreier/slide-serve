@@ -20,6 +20,7 @@ type slide struct {
 	classes    string
 	javascript string
 	hash       string
+	notes      string
 }
 
 func (s *slide) buildHash() {
@@ -28,6 +29,7 @@ func (s *slide) buildHash() {
 
 type slideContent struct {
 	Slides     template.HTML
+	Notes      template.HTML
 	Title      string
 	SlideRatio string
 	Styles     template.CSS
@@ -118,11 +120,6 @@ func (h *holder) generateSlides(content string) {
 			hideSlide = false
 		} else {
 
-			// speaker note, just move on for now
-			if strings.HasPrefix(tmp, "@note") {
-				continue
-			}
-
 			if strings.HasPrefix(tmp, "@img") {
 				s.image = strings.Replace(tmp, "@img", "", -1)
 			} else if strings.HasPrefix(tmp, "@css") {
@@ -150,6 +147,9 @@ func (h *holder) generateSlides(content string) {
 				s.content += buf
 			} else if strings.HasPrefix(tmp, "@hidden") {
 				hideSlide = true
+			} else if strings.HasPrefix(tmp, "@note") {
+				s.notes += strings.Replace(tmp, "@note", "", -1)
+				s.notes += "\n"
 			} else {
 				s.content += tmp + "\n"
 			}

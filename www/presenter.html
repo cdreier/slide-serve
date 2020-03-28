@@ -10,14 +10,17 @@
         display: flex;
         height: 576px;
       }
-      .slide-root.current {
+      #preview-notes {
+        display: flex;
+      }
+      .viewPort {
         flex: 1;
         position: relative;
+      }
+      .slide-root.viewPort {
         border: 1px solid #333;
       }
-      .slide-root.next {
-        flex: 1;
-        position: relative;
+      .slide-root.viewPort {
         border: 1px solid #333;
       }
     </style>
@@ -28,6 +31,8 @@
       var currentSlide = -1;
       var currentSlides = null
       var nextSlides = null
+      var currentNotes = null
+      var nextNotes = null
 
       function resize() {
         var w = window.innerWidth;
@@ -71,12 +76,16 @@
         }
         currentSlides.forEach(hide)
         nextSlides.forEach(hide)
+        currentNotes.forEach(hide)
+        nextNotes.forEach(hide)
 
         if(index < currentSlides.length){
           show(currentSlides[index])
+          show(currentNotes[index])
         }
         if(index+1 < nextSlides.length){
           show(nextSlides[index+1])
+          show(nextNotes[index+1])
         }
 
         currentSlide = index
@@ -97,6 +106,8 @@
         startSocket();
         currentSlides = document.querySelectorAll('.current .slide');
         nextSlides = document.querySelectorAll('.next .slide');
+        currentNotes = document.querySelectorAll('.current .note');
+        nextNotes = document.querySelectorAll('.next .note');
 
         var tmpSlideFromHash = parseInt(window.location.hash.substring(1)||0, 10)
         goTo(tmpSlideFromHash);
@@ -106,12 +117,16 @@
   </head>
   <body >
     <div id="preview">
-      <div class="slide-root current">
+      <div class="slide-root current viewPort">
         {{.Slides}}
       </div>
-      <div class="slide-root next">
+      <div class="slide-root next viewPort">
         {{.Slides}}
       </div>
+    </div>
+    <div id="preview-notes">
+      <div class="viewPort current">{{.Notes}}</div>
+      <div class="viewPort next">{{.Notes}}</div>
     </div>
   </body>
 </html>
