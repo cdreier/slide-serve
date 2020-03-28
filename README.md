@@ -10,6 +10,10 @@ you only need to learn 5 pseudo-markdown rules and a few annotations to build a 
 
 for really, really fast slide-creation and iteration and a good *developer*-experience i created this server
 
+and for a good talk, you can control the presentation from the presenter view, including the next slide and your speaker notes
+
+![presenter-view](https://github.com/cdreier/slide-serve/blob/master/demogif/presenter-view.png)
+
 please take a look at the [extended example presentation](http://htmlpreview.github.io/?https://github.com/cdreier/slide-serve/blob/master/example_html/Slide.html) from slide-html
 
 ## quickstart
@@ -29,6 +33,9 @@ and visit [http://127.0.0.1:8080](http://127.0.0.1:8080)
   * you can even write more than one plaintext file, they are added in alphanumerical order
 * start with the `-dev` flag to auto reload the browser on that slide you just edited
   * this is just awesome!
+* just go to http://127.0.0.1:8080/presenter and controll the presentation from the presenter view!
+  * see the current and the next slide
+  * see the speaker-@notes
 * add styles and background images next to your content
   * no hardcoded slide-numbers in css
   * don't count your slides, i'll do it for you ;)
@@ -51,6 +58,7 @@ and visit [http://127.0.0.1:8080](http://127.0.0.1:8080)
 `@code/language`  
 `@append`  
 `@hidden`  
+`@note`  
 
 the path is relative to your presentation directory, if you like to create an image folder it would change to `@img/images/imagename.gif`
 
@@ -130,10 +138,6 @@ example (the position of the `@code` annotation does not matter)
   }
 ```
 
-## build your own
-
-i used [pkger](https://github.com/markbates/pkger) to embedd the html template in the binary
-
 # useful snippets
 
 ## list items popping up
@@ -163,7 +167,6 @@ next item
 item 3
 @append
 ```
-
 
 ## restarting gifs
 
@@ -261,6 +264,13 @@ if something wont fit with your presentation styles, you can overwrite the print
 
 -pdf 
 * overwrite the summary print styles with full slide prints (default false)
+
+-click 
+* on default you only navigate with arrow keys, this enabled 'next slide' on click
+
+# build on your own
+
+i used [pkger](https://github.com/markbates/pkger) to embedd the assets in the binary, you should check it out!
 
 # deployment
 
