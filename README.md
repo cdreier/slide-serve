@@ -10,7 +10,7 @@ you only need to learn 5 pseudo-markdown rules and a few annotations to build a 
 
 for really, really fast slide-creation and iteration and a good *developer*-experience i created this server
 
-and for a good talk, you can control the presentation from the presenter view, including the next slide and your speaker notes
+and for a good talk, you can control the presentation from the presenter view, including the next slide and your speaker notes (example from the quickstart presentation)
 
 ![presenter-view](https://github.com/cdreier/slide-serve/blob/master/demogif/presenter-view.png)
 
