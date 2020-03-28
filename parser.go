@@ -149,7 +149,7 @@ func (h *holder) generateSlides(content string) {
 				hideSlide = true
 			} else if strings.HasPrefix(tmp, "@note") {
 				s.notes += strings.Replace(tmp, "@note", "", -1)
-				s.notes += "\n"
+				s.notes += "<br/>"
 			} else {
 				s.content += tmp + "\n"
 			}

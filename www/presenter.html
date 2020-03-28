@@ -13,6 +13,9 @@
       #preview-notes {
         display: flex;
       }
+      #preview-notes .note {
+        font-size: 24px;
+      }
       .viewPort {
         flex: 1;
         position: relative;
@@ -94,7 +97,6 @@
 
       window.onload = function() {
         resize();
-        window.onclick = emitNext;
         window.onkeydown = function(e) {
           if (e.keyCode == 39) {
             emitNext()
@@ -127,6 +129,9 @@
     <div id="preview-notes">
       <div class="viewPort current">{{.Notes}}</div>
       <div class="viewPort next">{{.Notes}}</div>
+    </div>
+    <div>
+      {{.DevMode}}
     </div>
   </body>
 </html>

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -98,6 +99,16 @@ func (h *holder) presenterHandler(w http.ResponseWriter, r *http.Request) {
 		PrintStyle: template.CSS(""),
 		Title:      h.title,
 		SlideRatio: h.slideRatio,
+	}
+
+	if h.dev {
+		devModeFile, _ := wwwDir.Open("devMode.html")
+		js, _ := template.New("devmode").Parse(mustFileToString(devModeFile))
+		var buf bytes.Buffer
+		data := make(map[string]string)
+		data["url"] = "ws://" + r.Host + "/ws"
+		js.Execute(&buf, data)
+		s.DevMode = template.HTML(buf.String())
 	}
 
 	t.Execute(w, s)
