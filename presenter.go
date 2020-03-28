@@ -67,8 +67,7 @@ func (h *holder) presenterSocket(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *holder) presenterHandler(w http.ResponseWriter, r *http.Request) {
-	wwwDir := pkger.Dir("/www")
-	slideFile, _ := wwwDir.Open("presenter.html")
+	slideFile, _ := pkger.Open("/www/presenter.html")
 	t, _ := template.New("slide").Parse(mustFileToString(slideFile))
 
 	slides := ""
@@ -102,7 +101,7 @@ func (h *holder) presenterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if h.dev {
-		devModeFile, _ := wwwDir.Open("devMode.html")
+		devModeFile, _ := pkger.Open("/www/devMode.html")
 		js, _ := template.New("devmode").Parse(mustFileToString(devModeFile))
 		var buf bytes.Buffer
 		data := make(map[string]string)

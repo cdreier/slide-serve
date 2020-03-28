@@ -125,8 +125,7 @@ func run(c *cli.Context) error {
 }
 
 func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
-	wwwDir := pkger.Dir("/www")
-	slideFile, _ := wwwDir.Open("slide.html")
+	slideFile, _ := pkger.Open("/www/slide.html")
 	t, _ := template.New("slide").Parse(mustFileToString(slideFile))
 
 	slides := ""
@@ -148,9 +147,9 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	cssFile, _ := wwwDir.Open("summaryStyle.css")
+	cssFile, _ := pkger.Open("/www/summaryStyle.css")
 	if h.pdfPrint {
-		cssFile, _ = wwwDir.Open("pdfStyle.css")
+		cssFile, _ = pkger.Open("/www/pdfStyle.css")
 	}
 
 	s := slideContent{
@@ -167,7 +166,7 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if h.dev {
-		devModeFile, _ := wwwDir.Open("devMode.html")
+		devModeFile, _ := pkger.Open("/www/devMode.html")
 		js, _ := template.New("devmode").Parse(mustFileToString(devModeFile))
 		var buf bytes.Buffer
 		data := make(map[string]string)
