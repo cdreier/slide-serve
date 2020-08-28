@@ -2,7 +2,7 @@
 
 ![Drone Build Status](https://github-drone.d.drailing.net/api/badges/cdreier/slide-serve/status.svg)
 
-![demogif](https://github.com/cdreier/slide-serve/blob/master/demogif/slide-serve-demo.gif)
+![demogif](https://github.com/cdreier/slide-serve/blob/master/demogif/slide-serve-quick-intro.gif)
 
 i really like the idea behind [slide-html](https://github.com/trikita/slide-html) and the [Takahashi method](https://en.wikipedia.org/wiki/Takahashi_method)
 
