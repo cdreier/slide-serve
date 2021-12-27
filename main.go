@@ -129,7 +129,7 @@ func copyFile(src, dest string) error {
 func export(c *cli.Context) error {
 	rootDir := c.GlobalString("dir")
 	dest := c.String("dest")
-	log.Println("start export", c.Args())
+	log.Println("start export")
 	if !dirExist(rootDir) {
 		return errors.New("cannot find root directory :(")
 	}
@@ -155,7 +155,8 @@ func export(c *cli.Context) error {
 		return err
 	}
 	w := bufio.NewWriter(f)
-	h.handle(w, nil)
+	h.handle(w, "")
+	log.Printf("exported to %s", dest)
 	return nil
 }
 func run(c *cli.Context) error {
@@ -202,7 +203,7 @@ func run(c *cli.Context) error {
 	log.Println("starting on port: " + port + " for directory " + rootDir)
 	return http.ListenAndServe(":"+port, nil)
 }
-func (h *holder) handle(wr io.Writer, r *http.Request) {
+func (h *holder) handle(wr io.Writer, host string) {
 	slideFile, _ := pkger.Open("/www/slide.html")
 	t, _ := template.New("slide").Parse(mustFileToString(slideFile))
 
@@ -274,7 +275,7 @@ func (h *holder) handle(wr io.Writer, r *http.Request) {
 		js, _ := template.New("devmode").Parse(mustFileToString(devModeFile))
 		var buf bytes.Buffer
 		data := make(map[string]string)
-		data["url"] = "ws://" + r.Host + "/ws"
+		data["url"] = "ws://" + host + "/ws"
 		js.Execute(&buf, data)
 		s.DevMode = template.HTML(buf.String())
 	}
@@ -283,7 +284,7 @@ func (h *holder) handle(wr io.Writer, r *http.Request) {
 }
 
 func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
-	h.handle(w, r)
+	h.handle(w, r.Host)
 }
 
 func isDir(dir string) bool {
