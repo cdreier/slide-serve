@@ -28,14 +28,16 @@ func (s *slide) buildHash() {
 }
 
 type slideContent struct {
-	Slides        template.HTML
-	Notes         template.HTML
-	Title         string
-	SlideRatio    string
-	Styles        template.CSS
-	PrintStyle    template.CSS
-	DevMode       template.HTML
-	ClickListener template.JS
+	Slides         template.HTML
+	Notes          template.HTML
+	Title          string
+	SlideRatio     string
+	Styles         template.CSS
+	PrintStyle     template.CSS
+	DevMode        template.HTML
+	ClickListener  template.JS
+	SocketCode     template.JS
+	SocketExecuter template.JS
 }
 
 func (h *holder) parse() {
@@ -87,9 +89,9 @@ func (h *holder) parse() {
 
 }
 
-func addStyleRule(filename string, slideNumber int) string {
+func addStyleRule(filename string, slideNumber int, imgRootUrl string) string {
 
-	imgURL := "/static" + filename
+	imgURL := imgRootUrl + filename
 
 	css := fmt.Sprintf(`.slide-%d {
 background: url("%s");
