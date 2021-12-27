@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
+	"fmt"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -84,6 +85,13 @@ func main() {
 			Name:   "export",
 			Usage:  "export slides",
 			Action: export,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "dest",
+					Value: "export",
+					Usage: "destination folder",
+				},
+			},
 		},
 	}
 
@@ -120,6 +128,7 @@ func copyFile(src, dest string) error {
 
 func export(c *cli.Context) error {
 	rootDir := c.GlobalString("dir")
+	dest := c.String("dest")
 	log.Println("start export", c.Args())
 	if !dirExist(rootDir) {
 		return errors.New("cannot find root directory :(")
@@ -138,10 +147,10 @@ func export(c *cli.Context) error {
 	}
 
 	h.parse()
-	os.Mkdir("export", 0755)
-	os.Mkdir("export/static", 0755)
-	f, err := os.Create("export/Side.html")
-	copyAllFileToFolderNotIncludeExtension(rootDir, "export/static", ".md")
+	os.Mkdir(dest, 0755)
+	os.Mkdir(fmt.Sprintf("%s/static", dest), 0755)
+	f, err := os.Create(fmt.Sprintf("%s/Side.html", dest))
+	copyAllFileToFolderNotIncludeExtension(rootDir, fmt.Sprintf("%s/static", dest), ".md")
 	if err != nil {
 		return err
 	}
@@ -152,6 +161,7 @@ func export(c *cli.Context) error {
 func run(c *cli.Context) error {
 	isDemo := false
 	rootDir := c.String("dir")
+
 	devMode := c.Bool("dev")
 	title := c.String("title")
 
