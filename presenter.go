@@ -80,7 +80,7 @@ func (h *holder) presenterHandler(w http.ResponseWriter, r *http.Request) {
 
 		if s.image != "" {
 			styles += "\n"
-			styles += addStyleRule(s.image, i)
+			styles += addStyleRule(s.image, i, h.imageRootUrl)
 		}
 
 		if s.styles != "" {

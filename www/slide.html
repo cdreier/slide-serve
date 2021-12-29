@@ -53,25 +53,7 @@
         goTo(Math.max(currentSlide - 1, 0));
       }
 
-      function startSocket(){
-        ws = new WebSocket("ws://"+location.host+"/presenterws");
-        ws.onopen = function(){
-          ws.send(JSON.stringify({
-            type: "presentation:join",
-          }))
-        }
-        ws.onmessage = function(data){
-          var msg = JSON.parse(data.data)
-          switch(msg.type){
-            case "requestNext":
-              next();
-              break;
-            case "requestPrev":
-              prev();
-              break;
-          }
-        }
-      }
+     {{.SocketCode}}
 
       window.onload = function() {
         resize();
@@ -88,7 +70,7 @@
             prev();
           }
         };
-        startSocket()
+       {{.SocketExecuter}}
       };
     </script>
   </head>

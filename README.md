@@ -241,6 +241,21 @@ if something wont fit with your presentation styles, you can overwrite the print
 }
 ```
 
+# export
+
+to export as static html file you can use the subcommand export ```slide-serve [global Flags] export [?dest="Destination folder"]```
+
+```
+NAME:
+   slide-serve export - export slides
+
+USAGE:
+   slide-serve export [command options] [arguments...]
+
+OPTIONS:
+   --dest value  destination folder (default: "export")
+```
+
 # cli flags
 
 -dev  

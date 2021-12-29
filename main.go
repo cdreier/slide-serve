@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
+	"fmt"
 	"html/template"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -29,6 +32,8 @@ type holder struct {
 	slideRatio   string
 	devCon       *websocket.Conn
 	presenterCon *websocket.Conn
+	addWebsocket bool
+	imageRootUrl string
 }
 
 func main() {
@@ -75,16 +80,89 @@ func main() {
 			Usage: "on default you only navigate with arrow keys, this enabled 'next slide' on click",
 		},
 	}
+	app.Commands = []cli.Command{
+		{
+			Name:   "export",
+			Usage:  "export slides",
+			Action: export,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "dest",
+					Value: "export",
+					Usage: "destination folder",
+				},
+			},
+		},
+	}
 
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal("cannot start slide-serve server! ", err.Error())
 	}
 
 }
+func copyAllFileToFolderNotIncludeExtension(folder string, dest string, ext string) error {
+	files, err := ioutil.ReadDir(folder)
+	if err != nil {
+		return err
+	}
+	for _, f := range files {
+		if strings.HasSuffix(f.Name(), ext) {
+			continue
+		}
+		src := folder + "/" + f.Name()
+		dst := dest + "/" + f.Name()
+		if err := copyFile(src, dst); err != nil {
+			return err
+		}
+	}
+	return nil
+}
 
+func copyFile(src, dest string) error {
+	data, err := ioutil.ReadFile(src)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return ioutil.WriteFile(dest, data, 0644)
+}
+
+func export(c *cli.Context) error {
+	rootDir := c.GlobalString("dir")
+	dest := c.String("dest")
+	log.Println("start export")
+	if !dirExist(rootDir) {
+		return errors.New("cannot find root directory :(")
+	}
+	h := holder{
+		dir:          rootDir,
+		title:        c.GlobalString("title"),
+		dev:          false,
+		demo:         false,
+		codeTheme:    c.GlobalString("syntaxhl"),
+		pdfPrint:     c.GlobalBool("pdf"),
+		slideRatio:   c.GlobalString("ratio"),
+		clickEnabled: c.GlobalBoolT("enableClick"),
+		addWebsocket: false,
+		imageRootUrl: "static",
+	}
+
+	h.parse()
+	os.Mkdir(dest, 0755)
+	os.Mkdir(fmt.Sprintf("%s/static", dest), 0755)
+	f, err := os.Create(fmt.Sprintf("%s/Side.html", dest))
+	copyAllFileToFolderNotIncludeExtension(rootDir, fmt.Sprintf("%s/static", dest), ".md")
+	if err != nil {
+		return err
+	}
+	w := bufio.NewWriter(f)
+	h.handle(w, "")
+	log.Printf("exported to %s", dest)
+	return nil
+}
 func run(c *cli.Context) error {
 	isDemo := false
 	rootDir := c.String("dir")
+
 	devMode := c.Bool("dev")
 	title := c.String("title")
 
@@ -105,6 +183,8 @@ func run(c *cli.Context) error {
 		pdfPrint:     c.Bool("pdf"),
 		slideRatio:   c.String("ratio"),
 		clickEnabled: c.Bool("enableClick"),
+		addWebsocket: true,
+		imageRootUrl: "/static",
 	}
 
 	h.parse()
@@ -123,8 +203,7 @@ func run(c *cli.Context) error {
 	log.Println("starting on port: " + port + " for directory " + rootDir)
 	return http.ListenAndServe(":"+port, nil)
 }
-
-func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
+func (h *holder) handle(wr io.Writer, host string) {
 	slideFile, _ := pkger.Open("/www/slide.html")
 	t, _ := template.New("slide").Parse(mustFileToString(slideFile))
 
@@ -136,7 +215,7 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 
 		if s.image != "" {
 			styles += "\n"
-			styles += addStyleRule(s.image, i)
+			styles += addStyleRule(s.image, i, h.imageRootUrl)
 		}
 
 		if s.styles != "" {
@@ -159,10 +238,36 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 		Title:         h.title,
 		SlideRatio:    h.slideRatio,
 		ClickListener: "",
+		SocketCode:    "",
 	}
 
 	if h.clickEnabled {
 		s.ClickListener = "window.onclick = next;"
+	}
+
+	if h.addWebsocket {
+		s.SocketExecuter = "startSocket()"
+		s.SocketCode = `
+		function startSocket(){
+			ws = new WebSocket("ws://"+location.host+"/presenterws");
+			ws.onopen = function(){
+				ws.send(JSON.stringify({
+					type: "presentation:join",
+				}))
+			}
+			ws.onmessage = function(data){
+				var msg = JSON.parse(data.data)
+				switch(msg.type){
+					case "requestNext":
+						next();
+						break;
+					case "requestPrev":
+						prev();
+						break;
+				}
+			}
+		}
+		`
 	}
 
 	if h.dev {
@@ -170,12 +275,16 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 		js, _ := template.New("devmode").Parse(mustFileToString(devModeFile))
 		var buf bytes.Buffer
 		data := make(map[string]string)
-		data["url"] = "ws://" + r.Host + "/ws"
+		data["url"] = "ws://" + host + "/ws"
 		js.Execute(&buf, data)
 		s.DevMode = template.HTML(buf.String())
 	}
 
-	t.Execute(w, s)
+	t.Execute(wr, s)
+}
+
+func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
+	h.handle(w, r.Host)
 }
 
 func isDir(dir string) bool {
