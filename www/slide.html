@@ -1,87 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>{{.Title}}</title>
-    <style>*{margin:0;padding:0;box-sizing:border-box}#slide{display:none}.slide{white-space:nowrap}.slide-content{align-self:center}@media screen{body{position:absolute;top:50%;left:50%}.slide-4x3{width:1024px;height:768px;margin:-384px 0 0 -512px}.slide-16x9{width:1024px;height:576px;margin:-288px 0 0 -512px}.slide-16x10{width:1024px;height:640px;margin:-320px 0 0 -512px}.slide{position:absolute;width:100%;height:100%;display:flex;justify-content:center;overflow:hidden}}</style>
-    <style>{{.PrintStyle}}</style>
-    <style >{{.Styles}}</style>
-    <script>
-      function resize() {
-        var w = window.innerWidth;
-        var h = window.innerHeight;
-        var bw = document.body.offsetWidth;
-        var bh = document.body.offsetHeight;
-        var scale = ((w/h < bw/bh) ? w/bw : h/bh);
-        document.body.style.transform = 'scale(' + scale + ')';
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{.Title}}</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    #slide {
+      display: none
+    }
+
+    .slide {
+      white-space: nowrap
+    }
+
+    .slide-content {
+      align-self: center
+    }
+
+    @media screen {
+      body {
+        position: absolute;
+        top: 50%;
+        left: 50%
       }
 
-      var currentSlide = -1;
+      .slide-4x3 {
+        width: 1024px;
+        height: 768px;
+        margin: -384px 0 0 -512px
+      }
 
-      function goTo(slideIndex) {
-        currentSlide = slideIndex;
-        window.location.hash = slideIndex;
-        var slides = document.querySelectorAll('.slide');
-        for (var i = 0; i < slides.length; i++) {
-          var el = slides[i];
-          var slide = el.children[0];
-          var scaleWidth = (el.offsetWidth * 0.8 / slide.offsetWidth);
-          var scaleHeight = (el.offsetHeight * 0.8 / slide.offsetHeight);
-          slide.style.transform = 'scale(' + Math.min(scaleWidth, scaleHeight) + ')';
-          if (i == currentSlide) {
-            el.style.visibility = '';
-          } else {
-            el.style.visibility = 'hidden';
-          }
+      .slide-16x9 {
+        width: 1024px;
+        height: 576px;
+        margin: -288px 0 0 -512px
+      }
+
+      .slide-16x10 {
+        width: 1024px;
+        height: 640px;
+        margin: -320px 0 0 -512px
+      }
+
+      .slide {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        overflow: hidden
+      }
+    }
+  </style>
+  <style>
+    {{.PrintStyle}}
+  </style>
+  <style>
+    {{.Styles}}
+  </style>
+  <script>
+    function resize() {
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      var bw = document.body.offsetWidth;
+      var bh = document.body.offsetHeight;
+      var scale = ((w / h < bw / bh) ? w / bw : h / bh);
+      document.body.style.transform = 'scale(' + scale + ')';
+    }
+
+    var currentSlide = -1;
+
+    function goTo(slideIndex) {
+      currentSlide = slideIndex;
+      window.location.hash = slideIndex;
+      var slides = document.querySelectorAll('.slide');
+      for (var i = 0; i < slides.length; i++) {
+        var el = slides[i];
+        var slide = el.children[0];
+        var scaleWidth = (el.offsetWidth * 0.8 / slide.offsetWidth);
+        var scaleHeight = (el.offsetHeight * 0.8 / slide.offsetHeight);
+        slide.style.transform = 'scale(' + Math.min(scaleWidth, scaleHeight) + ')';
+        if (i == currentSlide) {
+          el.style.visibility = '';
+        } else {
+          el.style.visibility = 'hidden';
         }
-
-        document.getElementsByTagName("body")[0].className = "slide-{{.SlideRatio}}";
-
-        var leaveEvt = new Event("slideLeave_"+slideIndex-1)
-        window.dispatchEvent(leaveEvt)
-
-        var evt = new Event("slideEnter_"+slideIndex)
-        window.dispatchEvent(evt)
       }
 
-      function next() {
-        goTo(Math.min(currentSlide + 1, document.querySelectorAll('.slide').length - 1));
-      }
+      var evt = new Event("slideEnter_" + slideIndex)
+      window.dispatchEvent(evt)
 
-      function prev() {
-        goTo(Math.max(currentSlide - 1, 0));
-      }
+      document.getElementsByTagName("body")[0].className = "slide-{{.SlideRatio}}";
+    }
 
-     {{.SocketCode}}
+    function next() {
+      var targetSlide = Math.min(currentSlide + 1, document.querySelectorAll('.slide').length - 1)
+      goTo(targetSlide);
+      var leaveEvt = new Event("slideLeave_" + targetSlide - 1)
+      window.dispatchEvent(leaveEvt)
+    }
 
-      window.onload = function() {
-        resize();
-        var tmpSlideFromHash = parseInt(window.location.hash.substring(1)||0, 10)
-        goTo(tmpSlideFromHash);
+    function prev() {
+      var targetSlide = Math.max(currentSlide - 1, 0)
+      goTo(targetSlide);
+      var leaveEvt = new Event("slideLeave_" + targetSlide + 1)
+      window.dispatchEvent(leaveEvt)
+    }
 
-        {{.ClickListener}}
-        
-        window.onresize = resize;
-        window.onkeydown = function(e) {
-          if (e.keyCode == 39) {
-            next();
-          } else if (e.keyCode == 37) {
-            prev();
-          }
-        };
-       {{.SocketExecuter}}
+    {{.SocketCode }}
+
+    window.onload = function () {
+      resize();
+      var tmpSlideFromHash = parseInt(window.location.hash.substring(1) || 0, 10)
+      goTo(tmpSlideFromHash);
+
+      {{.ClickListener }}
+
+      window.onresize = resize;
+      window.onkeydown = function (e) {
+        if (e.keyCode == 39) {
+          next();
+        } else if (e.keyCode == 37) {
+          prev();
+        }
       };
-    </script>
-  </head>
-  <body class="slide-{{.SlideRatio}}">
-    <div class="slide-root">
-      {{.Slides}}
-    </div>
-    <div>
-        {{.DevMode}}
-    </div>
-    <div id="logo"></div>
-  </body>
-</html>
+      {{.SocketExecuter }}
+    };
+  </script>
+</head>
 
+<body class="slide-{{.SlideRatio}}">
+  <div class="slide-root">
+    {{.Slides}}
+  </div>
+  <div>
+    {{.DevMode}}
+  </div>
+  <div id="logo"></div>
+</body>
+
+</html>

@@ -16,3 +16,6 @@ var DevMode string
 
 //go:embed presenter.html
 var Presenter string
+
+//go:embed zoom.js
+var ZoomJS string

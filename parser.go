@@ -4,8 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"html/template"
+	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -16,8 +18,23 @@ type slide struct {
 	styles     string
 	classes    string
 	javascript string
+	zoom       zoom
 	hash       string
 	notes      string
+}
+
+type zoom struct {
+	enabled bool
+	Scale   float64
+	Origin  string
+}
+
+func newZoom(scale float64, origin string) zoom {
+	return zoom{
+		enabled: true,
+		Scale:   scale,
+		Origin:  origin,
+	}
 }
 
 func (s *slide) buildHash() {
@@ -130,14 +147,12 @@ func (h *holder) generateSlides(content string) {
 				if err == nil {
 					s.styles = string(data)
 				}
-
 			} else if strings.HasPrefix(tmp, "@js") {
 				filename := strings.Replace(tmp, "@js", "", -1)
 				data, err := os.ReadFile(h.dir + filename)
 				if err == nil {
 					s.javascript = string(data)
 				}
-
 			} else if strings.HasPrefix(tmp, "@code/") {
 				s.code = strings.Replace(tmp, "@code/", "", -1)
 			} else if strings.HasPrefix(tmp, "@classes/") {
@@ -149,6 +164,18 @@ func (h *holder) generateSlides(content string) {
 				s.content += buf
 			} else if strings.HasPrefix(tmp, "@hidden") {
 				hideSlide = true
+			} else if strings.HasPrefix(tmp, "@zoom/") {
+				zoomStr := strings.TrimPrefix(tmp, "@zoom/")
+				zoomParts := strings.Split(zoomStr, ",")
+				scale, err := strconv.ParseFloat(zoomParts[0], 64)
+				if err != nil {
+					log.Println("error parsing zoom makro: ", err)
+				}
+				origin := "center center"
+				if len(zoomParts) > 1 {
+					origin = strings.Trim(zoomParts[1], " ")
+				}
+				s.zoom = newZoom(scale, origin)
 			} else if strings.HasPrefix(tmp, "@note") {
 				s.notes += strings.Replace(tmp, "@note", "", -1)
 				s.notes += "<br/>"
