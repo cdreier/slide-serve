@@ -5,6 +5,9 @@ to make content look great
 # #1
 Each paragraph is a slide
 
+@append
+@zoom/1.2, top left
+
 # #2
 Headlines are equal to markdown syntax
 # headline 1

@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"text/template"
 
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
+	"github.com/cdreier/slide-serve/www"
 )
 
 const codeMarker = "##CODE##"
@@ -83,6 +85,15 @@ func renderSlide(s slide, index int, codeTheme string) string {
 				})
 			</script>
 		`, index, classes)
+	}
+
+	if s.zoom.enabled {
+		// we just compile the zoom js and add it to the javascript, added in the next step
+		zoomTmpl, _ := template.New("zoomjs").Parse(www.ZoomJS)
+		sb := strings.Builder{}
+		zoomTmpl.Execute(&sb, s.zoom)
+		s.javascript += "\n\n"
+		s.javascript += sb.String()
 	}
 
 	if s.javascript != "" {
