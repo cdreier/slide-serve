@@ -4,12 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/markbates/pkger"
 )
 
 type slide struct {
@@ -45,31 +42,33 @@ func (h *holder) parse() {
 		// example presentation
 		fmt.Println("serving example presentation")
 
-		pkger.Walk("/example", func(path string, info os.FileInfo, err error) error {
+		// TODO remove pkger in favor of embed
 
-			if filepath.Base(path) == "styles.css" {
-				f, _ := pkger.Open(path)
-				h.styles += mustFileToString(f)
-			}
+		// pkger.Walk("/example", func(path string, info os.FileInfo, err error) error {
 
-			if filepath.Ext(path) == ".md" {
-				f, _ := pkger.Open(path)
-				h.generateSlides(mustFileToString(f))
-			}
+		// 	if filepath.Base(path) == "styles.css" {
+		// 		f, _ := pkger.Open(path)
+		// 		h.styles += mustFileToString(f)
+		// 	}
 
-			return nil
-		})
+		// 	if filepath.Ext(path) == ".md" {
+		// 		f, _ := pkger.Open(path)
+		// 		h.generateSlides(mustFileToString(f))
+		// 	}
+
+		// 	return nil
+		// })
 
 	} else {
 		// user presentation
 		h.slides = make([]slide, 0)
 		h.styles = ""
-		filepath.Walk(h.dir, func(path string, info os.FileInfo, err error) error {
+		filepath.Walk(h.dir, func(path string, info os.FileInfo, _ error) error {
 			if info == nil || info.IsDir() {
 				return nil
 			}
 			// reading all the files, check file ext before reading?
-			content, err := ioutil.ReadFile(path)
+			content, err := os.ReadFile(path)
 			if err != nil {
 				fmt.Println("cannot read... skipping ", path)
 				return nil
@@ -127,14 +126,14 @@ func (h *holder) generateSlides(content string) {
 				s.image = strings.Replace(tmp, "@img", "", -1)
 			} else if strings.HasPrefix(tmp, "@css") {
 				filename := strings.Replace(tmp, "@css", "", -1)
-				data, err := ioutil.ReadFile(h.dir + filename)
+				data, err := os.ReadFile(h.dir + filename)
 				if err == nil {
 					s.styles = string(data)
 				}
 
 			} else if strings.HasPrefix(tmp, "@js") {
 				filename := strings.Replace(tmp, "@js", "", -1)
-				data, err := ioutil.ReadFile(h.dir + filename)
+				data, err := os.ReadFile(h.dir + filename)
 				if err == nil {
 					s.javascript = string(data)
 				}

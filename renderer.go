@@ -30,8 +30,7 @@ func renderSlide(s slide, index int, codeTheme string) string {
 			code += line + "\n"
 			slideMarkup += codeMarker
 		} else if strings.HasPrefix(line, "#") {
-			var headlinetype int
-			headlinetype = strings.Index(line, " ")
+			headlinetype := strings.Index(line, " ")
 			line = strings.TrimLeft(line, "#")
 			line = headline(line, headlinetype)
 			slideMarkup += line
@@ -74,8 +73,7 @@ func renderSlide(s slide, index int, codeTheme string) string {
 	}
 
 	if s.classes != "" {
-		var classes string
-		classes = strings.Replace(s.classes, ",", " ", -1)
+		classes := strings.Replace(s.classes, ",", " ", -1)
 		slideMarkup += fmt.Sprintf(`
 			<script>
 				window.addEventListener('slideEnter_%d', function(){
@@ -148,8 +146,8 @@ func getHighlightedMarkup(code string, lang string, codeTheme string) (string, s
 	highlightedCode := new(bytes.Buffer)
 	cssClasses := new(bytes.Buffer)
 
-	iterator, err := lexer.Tokenise(nil, code)
-	err = formatter.Format(highlightedCode, style, iterator)
+	iterator, _ := lexer.Tokenise(nil, code)
+	err := formatter.Format(highlightedCode, style, iterator)
 	if err != nil {
 		return fmt.Sprintf(`
 			<pre>%s</pre>

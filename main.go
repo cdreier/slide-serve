@@ -7,15 +7,14 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 
+	"github.com/cdreier/slide-serve/www"
 	"github.com/gorilla/websocket"
-	"github.com/markbates/pkger"
 	"github.com/urfave/cli"
 )
 
@@ -101,7 +100,7 @@ func main() {
 
 }
 func copyAllFileToFolderNotIncludeExtension(folder string, dest string, ext string) error {
-	files, err := ioutil.ReadDir(folder)
+	files, err := os.ReadDir(folder)
 	if err != nil {
 		return err
 	}
@@ -119,11 +118,11 @@ func copyAllFileToFolderNotIncludeExtension(folder string, dest string, ext stri
 }
 
 func copyFile(src, dest string) error {
-	data, err := ioutil.ReadFile(src)
+	data, err := os.ReadFile(src)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return ioutil.WriteFile(dest, data, 0644)
+	return os.WriteFile(dest, data, 0644)
 }
 
 func export(c *cli.Context) error {
@@ -204,8 +203,7 @@ func run(c *cli.Context) error {
 	return http.ListenAndServe(":"+port, nil)
 }
 func (h *holder) handle(wr io.Writer, host string) {
-	slideFile, _ := pkger.Open("/www/slide.html")
-	t, _ := template.New("slide").Parse(mustFileToString(slideFile))
+	t, _ := template.New("slide").Parse(www.Slide)
 
 	slides := ""
 	styles := h.styles
@@ -226,15 +224,15 @@ func (h *holder) handle(wr io.Writer, host string) {
 
 	}
 
-	cssFile, _ := pkger.Open("/www/summaryStyle.css")
+	cssFile := www.StyleSummary
 	if h.pdfPrint {
-		cssFile, _ = pkger.Open("/www/pdfStyle.css")
+		cssFile = www.StylePDF
 	}
 
 	s := slideContent{
 		Slides:        template.HTML(slides),
 		Styles:        template.CSS(styles),
-		PrintStyle:    template.CSS(mustFileToString(cssFile)),
+		PrintStyle:    template.CSS(cssFile),
 		Title:         h.title,
 		SlideRatio:    h.slideRatio,
 		ClickListener: "",
@@ -271,8 +269,7 @@ func (h *holder) handle(wr io.Writer, host string) {
 	}
 
 	if h.dev {
-		devModeFile, _ := pkger.Open("/www/devMode.html")
-		js, _ := template.New("devmode").Parse(mustFileToString(devModeFile))
+		js, _ := template.New("devmode").Parse(www.DevMode)
 		var buf bytes.Buffer
 		data := make(map[string]string)
 		data["url"] = "ws://" + host + "/ws"
@@ -287,23 +284,10 @@ func (h *holder) handler(w http.ResponseWriter, r *http.Request) {
 	h.handle(w, r.Host)
 }
 
-func isDir(dir string) bool {
-	stat, _ := os.Stat(dir)
-	return stat.IsDir()
-}
-
 func dirExist(dir string) bool {
 	_, err := os.Stat(dir)
 	if err == nil {
 		return true
 	}
 	return !os.IsNotExist(err)
-}
-
-func mustFileToString(f http.File) string {
-	content, err := ioutil.ReadAll(f)
-	if err != nil {
-		log.Fatal("must read file to string failed: ", err.Error())
-	}
-	return string(content)
 }
