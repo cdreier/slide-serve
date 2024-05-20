@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/markbates/pkger"
+	"github.com/cdreier/slide-serve/www"
 )
 
 type presenterMsg struct {
@@ -45,18 +45,15 @@ func (h *holder) presenterSocket(w http.ResponseWriter, r *http.Request) {
 			} else {
 				log.Println("presenter socker is null")
 			}
-			break
 		case "prev":
 			if h.presenterCon != nil {
 				h.presenterCon.WriteJSON(presenterMsg{
 					Type: "requestPrev",
 				})
 			}
-			break
 		case "presentation:join":
 			h.presenterCon = connection
 			log.Println("presentation joined")
-			break
 		}
 		// err = connection.WriteMessage(mt, message)
 		// if err != nil {
@@ -67,8 +64,7 @@ func (h *holder) presenterSocket(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *holder) presenterHandler(w http.ResponseWriter, r *http.Request) {
-	slideFile, _ := pkger.Open("/www/presenter.html")
-	t, _ := template.New("slide").Parse(mustFileToString(slideFile))
+	t, _ := template.New("slide").Parse(www.Presenter)
 
 	slides := ""
 	notes := ""
@@ -101,8 +97,7 @@ func (h *holder) presenterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if h.dev {
-		devModeFile, _ := pkger.Open("/www/devMode.html")
-		js, _ := template.New("devmode").Parse(mustFileToString(devModeFile))
+		js, _ := template.New("devmode").Parse(www.DevMode)
 		var buf bytes.Buffer
 		data := make(map[string]string)
 		data["url"] = "ws://" + r.Host + "/ws"
